@@ -126,12 +126,16 @@ class _AddProductState extends State<AddProduct> {
                   ),
                   SizedBox( height: 20),
                   RaisedButton(
+                    color: Color(0xFF66FCF1) ,
+                    padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                     onPressed: (){
                       _formKey.currentState.save();
                       final newproduct = NewProduct(_name, int.parse(_sellingPrice) , int.parse(_buyingPrice));
                       addNewProduct(newproduct);
+                      _formKey.currentState.reset();
                     },
-                    child: Text('Sauvegarder'),
+                    child: Text('Sauvegarder' ,
+                        style: TextStyle(fontSize: 20  )),
                   )
 
                 ],

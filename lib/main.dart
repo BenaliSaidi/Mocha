@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:mocha/model/productList.dart';
+import 'package:mocha/displayProductList.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 
@@ -21,9 +22,14 @@ void main() async {
     routes: {
       '/home' : (context) => Home(),
       '/addnewproduct' : (context) => AddProduct(),
+      '/displayProductList' : (context) => productList(),
+
     },
   ),
   );
 }
+
+
+
 
 

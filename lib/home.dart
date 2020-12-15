@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mocha/addnewproduct.dart';
+import 'package:mocha/displayProductList.dart';
 
 void main() => runApp(MaterialApp(home: Home(),));
 
@@ -21,14 +21,6 @@ class Home extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Container(
-          //   margin: EdgeInsets.fromLTRB(0, 0, 0 , 20),
-          //   child: Icon(
-          //     Icons.emoji_food_beverage_outlined,
-          //     size: 150,
-          //     color: Color(0xFF66FCF1),
-          //   ),
-          // ),
           Container(
             margin: EdgeInsets.fromLTRB(30, 0, 30 , 0),
             child: OutlineButton(
@@ -42,7 +34,7 @@ class Home extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddProduct()),
+                  MaterialPageRoute(builder: (context) => productList()),
                 );
                 print("HELLO");
               },
