@@ -12,4 +12,6 @@ class NewProduct {
   final int sellingPrice;
 
   NewProduct(this.name, this.buyingPrice, this.sellingPrice);
+
+
 }

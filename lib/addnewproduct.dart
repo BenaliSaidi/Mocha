@@ -16,22 +16,22 @@ class _AddProductState extends State<AddProduct> {
   String _name;
   String _buyingPrice;
   String _sellingPrice;
+  List<int> listPrice = [];
+
 
   void addNewProduct (NewProduct product){
     final productsBox = Hive.box('product');
     productsBox.add(product);
     print("this is " + product.name );
     print("this is buying price  " + product.buyingPrice.toString() );
-    print("this is seling price " + product.sellingPrice.toString() );
+    print("this is selling price " + product.sellingPrice.toString() );
+    int sum = listPrice.fold(0, (p, c) => p + c);
+    print (sum);
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //resizeToAvoidBottomPadding: false,
-        //resizeToAvoidBottomPadding: true,
-        //resizeToAvoidBottomInset: false,
         backgroundColor: Color(0xFF1F2833),
       appBar: AppBar(
       title: Text(
@@ -130,7 +130,7 @@ class _AddProductState extends State<AddProduct> {
                     padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                     onPressed: (){
                       _formKey.currentState.save();
-                      final newproduct = NewProduct(_name, int.parse(_sellingPrice) , int.parse(_buyingPrice));
+                      final newproduct = NewProduct(_name, int.parse(_buyingPrice) , int.parse(_sellingPrice));
                       addNewProduct(newproduct);
                       _formKey.currentState.reset();
                     },

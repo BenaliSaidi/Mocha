@@ -36,7 +36,7 @@ class Home extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => productList()),
                 );
-                print("HELLO");
+
               },
             ),
           ),
@@ -54,7 +54,6 @@ class Home extends StatelessWidget {
                 color: Color(0xFF66FCF1),
               ),
               onPressed: () {
-                print("HELLO");
               },
             ),
           ),
@@ -72,7 +71,7 @@ class Home extends StatelessWidget {
                 color: Color(0xFF66FCF1),
               ),
               onPressed: () {
-                print("HELLO");
+
               },
             ),
           ),

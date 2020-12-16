@@ -6,10 +6,12 @@ import 'package:mocha/model/productList.dart';
 
 // ignore: camel_case_types
 class productList extends StatelessWidget {
-  const productList({
+   productList({
     Key key,
   }) : super(key: key);
+  List<int> listPrices = [];
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF1F2833),
@@ -22,8 +24,36 @@ class productList extends StatelessWidget {
       centerTitle: true,
       backgroundColor: Color(0xFF0B0C10),
       ),
-      body: Column(
+      body:
+      Column(
           children: [
+            ListTile(
+              tileColor: Color(0xFF15171e),
+              trailing: IconButton(
+                onPressed: (){},
+                icon: Icon(Icons.delete,color: Color(0x00000000)),
+              ),
+              title:Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.center ,
+                    width : 80,
+                    child: Text('Article', style: TextStyle(fontSize: 18 ,color:Color(0xFF45A29E) )),
+                  ),
+                  Container(
+                    alignment: Alignment.center ,
+                    width : 70,
+                    child: Text('Prix A' , style: TextStyle(fontSize: 18 ,color:Color(0xFF45A29E)),),
+                  ),
+                  Container(
+                    alignment: Alignment.center ,
+                    width : 70,
+                    child: Text('Prix V' , style: TextStyle(fontSize: 18 ,color:Color(0xFF45A29E)),),
+                  )
+                ],
+              ),
+            ),
             Expanded(child: _buildListView()),
           ],
         ),
@@ -47,15 +77,40 @@ class productList extends StatelessWidget {
         return ListView.builder(
           itemCount: Hive.box('product').length,
           itemBuilder: (context, index) {
-            final contact = Hive.box('product').getAt(index) as NewProduct;
-            return Column(
-              children: [
+            final products = Hive.box('product').getAt(index) as NewProduct;
+            List<int> listPrice = [];
+            listPrice.add(products.sellingPrice);
+            print (listPrice);
+            return
                 ListTile(
-                  title: Text(contact.name,style: TextStyle(fontSize: 20 , color: Colors.grey),),
-                  subtitle: Text(contact.sellingPrice.toString() ,style: TextStyle(fontSize: 20 , color: Colors.grey)),
-                ),
-              ],
-            );
+                  trailing: IconButton(
+                          icon: Icon(Icons.delete,color: Color(0xFF45A29E) ,),
+                          onPressed: () {
+                            Hive.box('product').deleteAt(index);
+                          },
+                          ),
+                  title:  Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.center ,
+                        width: 80,
+                        child:Text(products.name,style: TextStyle(fontSize:16 , color: Colors.grey),textAlign:TextAlign.center ),
+                      ),
+                      Container(
+                        alignment: Alignment.center ,
+                        width: 70,
+                        child:Text(products.buyingPrice.toString() ,style: TextStyle(fontSize:15 , color: Colors.grey),textAlign:TextAlign.right,),
+                      ),
+                      Container(
+                        alignment: Alignment.center ,
+                        width: 70,
+                        child:Text(products.sellingPrice.toString() ,style: TextStyle(fontSize: 15 , color: Colors.grey),textAlign:TextAlign.left),
+                      ),
+                      Text('')
+                    ],
+                  ),
+                );
           },
         );
       },
