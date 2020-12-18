@@ -16,8 +16,6 @@ class _AddProductState extends State<AddProduct> {
   String _name;
   String _buyingPrice;
   String _sellingPrice;
-  List<int> listPrice = [];
-
 
   void addNewProduct (NewProduct product){
     final productsBox = Hive.box('product');
@@ -25,8 +23,6 @@ class _AddProductState extends State<AddProduct> {
     print("this is " + product.name );
     print("this is buying price  " + product.buyingPrice.toString() );
     print("this is selling price " + product.sellingPrice.toString() );
-    int sum = listPrice.fold(0, (p, c) => p + c);
-    print (sum);
   }
 
   @override
@@ -84,7 +80,7 @@ class _AddProductState extends State<AddProduct> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor : Colors.white10,
-                      labelText: 'Prix d_achat',
+                      labelText: 'Prix d_achat ' ,
                       labelStyle: TextStyle(
                           color: Color(0xFF66FCF1),fontSize: 13
                       ),

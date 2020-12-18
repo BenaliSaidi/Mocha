@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
 import 'package:mocha/model/productList.dart';
 import 'package:mocha/displayProductList.dart';
+import 'package:mocha/CounterMenu.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 
@@ -23,6 +24,7 @@ void main() async {
       '/home' : (context) => Home(),
       '/addnewproduct' : (context) => AddProduct(),
       '/displayProductList' : (context) => productList(),
+      '/CounterMenu' : (context) => counterMenu(),
 
     },
   ),

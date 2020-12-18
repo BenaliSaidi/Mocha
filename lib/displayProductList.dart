@@ -3,24 +3,21 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mocha/addnewproduct.dart';
 import 'package:mocha/model/productList.dart';
+void test() {
 
+}
 // ignore: camel_case_types
 class productList extends StatelessWidget {
    productList({
     Key key,
   }) : super(key: key);
-  List<int> listPrices = [];
   @override
 
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF1F2833),
       appBar: AppBar(
-      title: Text(
-      'Mocha',
-      style: TextStyle(
-      fontSize: 30 , color: Color(0xFF66FCF1)
-      ),),
+      title: Text('Mocha', style: TextStyle(fontSize: 30 , color: Color(0xFF66FCF1)),),
       centerTitle: true,
       backgroundColor: Color(0xFF0B0C10),
       ),
@@ -78,9 +75,6 @@ class productList extends StatelessWidget {
           itemCount: Hive.box('product').length,
           itemBuilder: (context, index) {
             final products = Hive.box('product').getAt(index) as NewProduct;
-            List<int> listPrice = [];
-            listPrice.add(products.sellingPrice);
-            print (listPrice);
             return
                 ListTile(
                   trailing: IconButton(
