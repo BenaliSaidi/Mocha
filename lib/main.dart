@@ -15,7 +15,8 @@ void main() async {
   final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(NewProductAdapter());
-  final box = await Hive.openBox('product');
+  await Hive.openBox('product');
+  await Hive.openBox('counterMorning');
 
   runApp(MaterialApp(
 

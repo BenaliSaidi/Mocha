@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mocha/displayProductList.dart';
+import 'package:mocha/counterMorning.dart';
 
 //void main() => runApp(MaterialApp(home: Home(),));
 
@@ -33,10 +33,10 @@ class counterMenu extends StatelessWidget {
               ),
               icon:Icon(Icons.wb_sunny,color: Color(0xFF66FCF1)) ,
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => productList()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CounterMorning()),
+                );
 
               },
             ),

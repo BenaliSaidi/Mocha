@@ -23,6 +23,8 @@ class _AddProductState extends State<AddProduct> {
     print("this is " + product.name );
     print("this is buying price  " + product.buyingPrice.toString() );
     print("this is selling price " + product.sellingPrice.toString() );
+
+
   }
 
   @override
@@ -126,7 +128,10 @@ class _AddProductState extends State<AddProduct> {
                     padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                     onPressed: (){
                       _formKey.currentState.save();
-                      final newproduct = NewProduct(_name, int.parse(_buyingPrice) , int.parse(_sellingPrice));
+                      final _benefit = int.parse(_sellingPrice) - int.parse(_buyingPrice);
+                      print(_benefit);
+                      final newproduct =
+                      NewProduct(_name, int.parse(_buyingPrice) , int.parse(_sellingPrice) , _benefit);
                       addNewProduct(newproduct);
                       _formKey.currentState.reset();
                     },

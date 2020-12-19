@@ -37,8 +37,8 @@ class Home extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => productList()),
                 );
-
               },
+
             ),
           ),
           SizedBox(
