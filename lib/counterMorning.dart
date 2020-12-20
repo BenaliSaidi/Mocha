@@ -1,15 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mocha/CounterMenu.dart';
 import 'package:mocha/model/productList.dart';
 
+List<int> prices = [];
+List<int> benefit = [];
 
 void addNewProductToCounter (NewProduct product) {
   final productsBox = Hive.box('counterMorning');
   productsBox.add(product);
 }
+calculatePrice (){
+  var pricesList = Hive.box('counterMorning').values.toList() ;
+  prices.clear();
+  if (prices.isEmpty){prices.add(0);}
+  pricesList.forEach((item) => prices.add(item.sellingPrice));
+  print(prices);
+  var sumP = prices.reduce((curr, next) => curr + next);
+  print(sumP);
+  return sumP ;
+}
+calculateBenefit (){
+  var benefitList = Hive.box('counterMorning').values.toList() ;
+  benefit.clear();
+  if (benefit.isEmpty){benefit.add(0);}
+  benefitList.forEach((item) => benefit.add(item.benefit));
+  print(benefit);
+  var sumB = benefit.reduce((curr, next) => curr + next);
+  print(sumB);
+  return sumB ;
+}
 
-class CounterMorning extends StatelessWidget {
+class CounterMorning extends StatefulWidget {
+  @override
+  _CounterMorningState createState() => _CounterMorningState();
+}
+class _CounterMorningState extends State<CounterMorning> {
+
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -39,7 +68,9 @@ class CounterMorning extends StatelessWidget {
             Container(
               child: Column(
                 children: [
-                  ListTile(
+                  Container(
+                    height: 50,
+                    child: ListTile(
             tileColor: Color(0xFF15171e),
           title:Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,12 +78,12 @@ class CounterMorning extends StatelessWidget {
             Container(
               alignment: Alignment.center ,
               width : 90,
-              child: Text('Article', style: TextStyle(fontSize: 14 ,color:Color(0xFF45A29E) )),
+              child: Text('Article', style: TextStyle(fontSize: 18 ,color:Color(0xFF45A29E),fontWeight: FontWeight.bold )),
             ),
             Container(
               alignment: Alignment.center ,
               width : 70,
-              child: Text('Prix V' , style: TextStyle(fontSize: 14 ,color:Color(0xFF45A29E)),),
+              child: Text('Prix' , style: TextStyle(fontSize: 18 ,color:Color(0xFF45A29E),fontWeight: FontWeight.bold ),),
             ),
             Container(
               child: IconButton(
@@ -63,15 +94,27 @@ class CounterMorning extends StatelessWidget {
           ],
         ),
        ),
+                  ),
                   Expanded(child: _buildListView()),
                   Container(
-                    color: Colors.blueGrey,
-                    height: 60,
+                    color: Color(0xFF15171e),
+                    height: 50,
                     child: Row(
                       children: [
-                        Container(
+                        Text('    Total : ' + calculatePrice().toString() + ' DA',
+                          style: TextStyle(fontSize: 18 ,color:Color(0xFF45A29E),fontWeight: FontWeight.bold)),
+                        SizedBox(width: 80,),
+                        OutlineButton(
+                          splashColor:Color(0xFF45A29E),
+                          highlightedBorderColor: Color(0xFF45A29E),
+                          child: Text("clôturer" , style: TextStyle(fontSize: 15, color: Color(0xFF45A29E) ),),
+                          borderSide: BorderSide(
+                            color: Color(0xFF45A29E),
+                          ),
+                          onPressed: () {
 
-                        )
+                          },
+                        ),
                       ],
                     )
                   )
@@ -84,7 +127,6 @@ class CounterMorning extends StatelessWidget {
                 crossAxisCount: 5 ,
                 children: List.generate(Hive.box('product').length,(index){
                   final products = Hive.box('product').getAt(index) as NewProduct;
-
                   return Container(
                       child: GestureDetector(
                         onTap: (){
@@ -92,6 +134,9 @@ class CounterMorning extends StatelessWidget {
                           NewProduct(products.name, products.buyingPrice , products.sellingPrice , products.benefit);
                           addNewProductToCounter(newproduct);
                           print (products.name);
+                          setState(() {
+                            calculatePrice();
+                          });
                         },
                           child:
                               Card(
@@ -100,7 +145,7 @@ class CounterMorning extends StatelessWidget {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child : Text(products.name,
-                                        style: TextStyle(fontSize:15 , color: Color(0xFF45A29E)),
+                                        style: TextStyle(fontSize:14 , color: Colors.black),
                                         textAlign:TextAlign.center,
                                       ),
                                     )
@@ -125,7 +170,8 @@ class CounterMorning extends StatelessWidget {
     return ValueListenableBuilder(
         valueListenable: Hive.box('counterMorning').listenable(),
         builder: (context, box, widget) {
-          return ListView.builder(
+          return
+            ListView.builder(
             itemCount: Hive.box('counterMorning').length,
             itemBuilder: (context, index) {
               final products = Hive.box('counterMorning').getAt(index) as NewProduct;
@@ -149,6 +195,9 @@ class CounterMorning extends StatelessWidget {
                           icon: Icon(Icons.delete,color: Color(0xFF45A29E) ,),
                           onPressed: () {
                             Hive.box('counterMorning').deleteAt(index);
+                            setState(() {
+                              calculatePrice();
+                            });
                           },
                         ),
                       )
@@ -157,6 +206,7 @@ class CounterMorning extends StatelessWidget {
                 );
             },
           );
+
         },
       );
 

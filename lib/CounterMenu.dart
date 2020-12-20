@@ -27,7 +27,7 @@ class counterMenu extends StatelessWidget {
               splashColor:Color(0xFF45A29E),
               highlightedBorderColor:  Color(0xFF45A29E),
               padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-              label: Text("Matin" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
+              label: Text(" Matin" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
               borderSide: BorderSide(
                 color: Color(0xFF66FCF1),
               ),
