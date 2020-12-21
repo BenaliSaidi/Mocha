@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mocha/counterMorning.dart';
+import 'package:mocha/counterEvening.dart';
 
 //void main() => runApp(MaterialApp(home: Home(),));
 
-class counterMenu extends StatelessWidget {
+class CounterMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +54,11 @@ class counterMenu extends StatelessWidget {
               label: Text("Soir" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
               borderSide: BorderSide(color: Color(0xFF66FCF1),),
               onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CounterEvening()),
+                );
+
               },
               icon:Icon(Icons.nights_stay,color: Color(0xFF66FCF1),) ,
             ),

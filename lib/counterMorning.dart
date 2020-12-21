@@ -46,7 +46,7 @@ class _CounterMorningState extends State<CounterMorning> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Mocha',
+            'Matin',
             style: TextStyle(
                 fontSize: 30 , color: Color(0xFF66FCF1)
             ),),
@@ -100,21 +100,23 @@ class _CounterMorningState extends State<CounterMorning> {
                     color: Color(0xFF15171e),
                     height: 50,
                     child: Row(
-                      children: [
+                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                       children: [
                         Text('    Total : ' + calculatePrice().toString() + ' DA',
                           style: TextStyle(fontSize: 18 ,color:Color(0xFF45A29E),fontWeight: FontWeight.bold)),
-                        SizedBox(width: 80,),
-                        OutlineButton(
-                          splashColor:Color(0xFF45A29E),
-                          highlightedBorderColor: Color(0xFF45A29E),
-                          child: Text("clôturer" , style: TextStyle(fontSize: 15, color: Color(0xFF45A29E) ),),
-                          borderSide: BorderSide(
-                            color: Color(0xFF45A29E),
-                          ),
-                          onPressed: () {
+                         SizedBox(width: 50,),
+                         OutlineButton(
+                              splashColor:Color(0xFF45A29E),
+                              highlightedBorderColor: Color(0xFF45A29E),
+                              child: Text("clôturer" , style: TextStyle(fontSize: 15, color: Color(0xFF45A29E) ),),
+                              borderSide: BorderSide(
+                                color: Color(0xFF45A29E),
+                              ),
+                              onPressed: () {
+                              },
+                            ),
 
-                          },
-                        ),
+
                       ],
                     )
                   )

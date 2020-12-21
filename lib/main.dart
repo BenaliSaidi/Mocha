@@ -17,6 +17,7 @@ void main() async {
   Hive.registerAdapter(NewProductAdapter());
   await Hive.openBox('product');
   await Hive.openBox('counterMorning');
+  await Hive.openBox('counterEvening');
 
   runApp(MaterialApp(
 
@@ -25,7 +26,7 @@ void main() async {
       '/home' : (context) => Home(),
       '/addnewproduct' : (context) => AddProduct(),
       '/displayProductList' : (context) => productList(),
-      '/CounterMenu' : (context) => counterMenu(),
+      '/CounterMenu' : (context) => CounterMenu(),
 
     },
   ),
