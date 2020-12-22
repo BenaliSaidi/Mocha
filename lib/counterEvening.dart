@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:mocha/CounterMenu.dart';
 import 'package:mocha/model/productList.dart';
+import 'package:mocha/model/statList.dart';
 
 List<int> prices = [];
 List<int> benefit = [];
+var newFormat = DateFormat("yyyy-MM-dd");
 
+timeNow(){
+  return newFormat.format(DateTime.now());
+}
 void addNewProductToCounter (NewProduct product) {
   final productsBox = Hive.box('counterEvening');
   productsBox.add(product);
@@ -31,6 +37,10 @@ calculateBenefit (){
   print(sumB);
   return sumB ;
 }
+void addNewMorningStat (NewList stat){
+  final statBox = Hive.box('statEvening');
+  statBox.add(stat);
+}
 
 class CounterEvening extends StatefulWidget {
   @override
@@ -54,7 +64,6 @@ class _CounterEveningState extends State<CounterEvening> {
             backgroundColor: Color(0xFF0B0C10),
             bottom: TabBar(
               indicatorColor: Color(0xFF66FCF1) ,
-              labelColor: Colors.red ,
               tabs: [
                 Tab(icon: Icon(Icons.emoji_food_beverage_outlined ,color: Color(0xFF66FCF1) )),
                 Tab(icon: Icon(Icons.list_alt , color: Color(0xFF66FCF1))),
@@ -113,6 +122,13 @@ class _CounterEveningState extends State<CounterEvening> {
                                   color: Color(0xFF45A29E),
                                 ),
                                 onPressed: () {
+                                  final listeStat = NewList(calculatePrice(),calculateBenefit(),timeNow());
+                                  addNewMorningStat(listeStat);
+                                  Hive.box('counterEvening').clear();
+                                  setState(() {
+                                    calculatePrice();
+                                  });
+
                                 },
                               ),
 

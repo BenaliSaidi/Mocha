@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:mocha/model/productList.dart';
+import 'package:toast/toast.dart';
 
 
 class AddProduct extends StatefulWidget {
@@ -20,11 +21,6 @@ class _AddProductState extends State<AddProduct> {
   void addNewProduct (NewProduct product){
     final productsBox = Hive.box('product');
     productsBox.add(product);
-    print("this is " + product.name );
-    print("this is buying price  " + product.buyingPrice.toString() );
-    print("this is selling price " + product.sellingPrice.toString() );
-
-
   }
 
   @override
@@ -134,6 +130,7 @@ class _AddProductState extends State<AddProduct> {
                       NewProduct(_name, int.parse(_buyingPrice) , int.parse(_sellingPrice) , _benefit);
                       addNewProduct(newproduct);
                       _formKey.currentState.reset();
+                      Toast.show("Toast plugin app", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
                     },
                     child: Text('Sauvegarder' ,
                         style: TextStyle(fontSize: 20  )),

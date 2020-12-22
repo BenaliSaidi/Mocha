@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:mocha/CounterMenu.dart';
+import 'package:intl/intl.dart';
 import 'package:mocha/model/productList.dart';
+import 'package:mocha/model/statList.dart';
+
 
 List<int> prices = [];
 List<int> benefit = [];
+var newFormat = DateFormat("yyyy-MM-dd");
+
+timeNow(){
+  return newFormat.format(DateTime.now());
+}
 
 void addNewProductToCounter (NewProduct product) {
   final productsBox = Hive.box('counterMorning');
   productsBox.add(product);
 }
+
 calculatePrice (){
   var pricesList = Hive.box('counterMorning').values.toList() ;
   prices.clear();
   if (prices.isEmpty){prices.add(0);}
   pricesList.forEach((item) => prices.add(item.sellingPrice));
   print(prices);
-  var sumP = prices.reduce((curr, next) => curr + next);
+  int sumP = prices.reduce((curr, next) => curr + next);
   print(sumP);
   return sumP ;
 }
@@ -27,9 +35,14 @@ calculateBenefit (){
   if (benefit.isEmpty){benefit.add(0);}
   benefitList.forEach((item) => benefit.add(item.benefit));
   print(benefit);
-  var sumB = benefit.reduce((curr, next) => curr + next);
+  int sumB = benefit.reduce((curr, next) => curr + next);
   print(sumB);
   return sumB ;
+}
+
+void addNewMorningStat (NewList stat){
+  final statBox = Hive.box('statMorning');
+  statBox.add(stat);
 }
 
 class CounterMorning extends StatefulWidget {
@@ -54,7 +67,6 @@ class _CounterMorningState extends State<CounterMorning> {
           backgroundColor: Color(0xFF0B0C10),
           bottom: TabBar(
             indicatorColor: Color(0xFF66FCF1) ,
-            labelColor: Colors.red ,
             tabs: [
               Tab(icon: Icon(Icons.emoji_food_beverage_outlined ,color: Color(0xFF66FCF1) )),
               Tab(icon: Icon(Icons.list_alt , color: Color(0xFF66FCF1))),
@@ -113,6 +125,13 @@ class _CounterMorningState extends State<CounterMorning> {
                                 color: Color(0xFF45A29E),
                               ),
                               onPressed: () {
+                                final listeStat = NewList(calculatePrice(),calculateBenefit(),timeNow());
+                                addNewMorningStat(listeStat);
+                                Hive.box('counterMorning').clear();
+                                setState(() {
+                                  calculatePrice();
+                                });
+
                               },
                             ),
 

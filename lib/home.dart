@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mocha/displayProductList.dart';
 import 'package:mocha/CounterMenu.dart';
+import 'package:mocha/stat.dart';
 
 void main() => runApp(MaterialApp(home: Home(),));
 
@@ -76,7 +77,10 @@ class Home extends StatelessWidget {
                 color: Color(0xFF66FCF1),
               ),
               onPressed: () {
-
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Stat()),
+                );
               },
             ),
           ),
