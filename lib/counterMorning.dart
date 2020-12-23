@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:mocha/model/productList.dart';
 import 'package:mocha/model/statList.dart';
+import 'package:toast/toast.dart';
 
 
 List<int> prices = [];
@@ -125,12 +126,25 @@ class _CounterMorningState extends State<CounterMorning> {
                                 color: Color(0xFF45A29E),
                               ),
                               onPressed: () {
-                                final listeStat = NewList(calculatePrice(),calculateBenefit(),timeNow());
-                                addNewMorningStat(listeStat);
-                                Hive.box('counterMorning').clear();
-                                setState(() {
-                                  calculatePrice();
-                                });
+                                if(Hive.box('counterMorning').length == 0){
+                                  Toast.show("veuillez d'abord ajouter des produits", context,
+                                      duration: 3,
+                                      gravity:  Toast.CENTER,
+                                      textColor: Color(0xFF66FCF1));
+                                }
+                                else{
+                                  final listeStat = NewList(calculatePrice(),calculateBenefit(),timeNow());
+                                  addNewMorningStat(listeStat);
+                                  Hive.box('counterMorning').clear();
+                                  setState(() {
+                                    calculatePrice();
+                                  });
+                                  Toast.show("Bravo vous avez clôturé la journée", context,
+                                      duration: 3,
+                                      gravity:  Toast.CENTER,
+                                      textColor: Color(0xFF66FCF1));
+                                }
+
 
                               },
                             ),
@@ -216,6 +230,10 @@ class _CounterMorningState extends State<CounterMorning> {
                           icon: Icon(Icons.delete,color: Color(0xFF45A29E) ,),
                           onPressed: () {
                             Hive.box('counterMorning').deleteAt(index);
+                            Toast.show("Produit supprimé avec succès", context,
+                                duration: 2,
+                                gravity:  Toast.BOTTOM,
+                                textColor: Color(0xFF66FCF1));
                             setState(() {
                               calculatePrice();
                             });

@@ -65,6 +65,12 @@ class _AddProductState extends State<AddProduct> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'SVP entrez un nom valide';
+                      }
+                      return null;
+                    },
 
                     onSaved: (value) => _name = value,
                   ),
@@ -78,7 +84,7 @@ class _AddProductState extends State<AddProduct> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor : Colors.white10,
-                      labelText: 'Prix d_achat ' ,
+                      labelText: 'Prix d\'achat ' ,
                       labelStyle: TextStyle(
                           color: Color(0xFF66FCF1),fontSize: 13
                       ),
@@ -90,6 +96,12 @@ class _AddProductState extends State<AddProduct> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'SVP entrez un prix de d\'achat valide';
+                      }
+                      return null;
+                    },
 
                     onSaved: (value) => _buyingPrice = value,
                   ),
@@ -115,6 +127,13 @@ class _AddProductState extends State<AddProduct> {
                         borderRadius: BorderRadius.circular(5.0),
                       ),
                     ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'SVP entrez un prix de vente valide';
+                      }
+                      return null;
+                    },
+
 
                     onSaved: (value) => _sellingPrice = value,
                   ),
@@ -123,19 +142,23 @@ class _AddProductState extends State<AddProduct> {
                     color: Color(0xFF66FCF1) ,
                     padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
                     onPressed: (){
-                      _formKey.currentState.save();
-                      final _benefit = int.parse(_sellingPrice) - int.parse(_buyingPrice);
-                      print(_benefit);
-                      final newproduct =
-                      NewProduct(_name, int.parse(_buyingPrice) , int.parse(_sellingPrice) , _benefit);
-                      addNewProduct(newproduct);
-                      _formKey.currentState.reset();
-                      Toast.show("Toast plugin app", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
-                    },
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        final _benefit = int.parse(_sellingPrice) - int.parse(_buyingPrice);
+                        print(_benefit);
+                        final newproduct =
+                        NewProduct(_name, int.parse(_buyingPrice) , int.parse(_sellingPrice) , _benefit);
+                        addNewProduct(newproduct);
+                        _formKey.currentState.reset();
+                        Toast.show("Produit sauvegardé avec succès", context,
+                            duration: 2,
+                            gravity:  Toast.BOTTOM,
+                        textColor: Color(0xFF66FCF1));
+                      }
+                      },
                     child: Text('Sauvegarder' ,
                         style: TextStyle(fontSize: 20  )),
                   )
-
                 ],
               )
 

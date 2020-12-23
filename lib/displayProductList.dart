@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mocha/addnewproduct.dart';
 import 'package:mocha/model/productList.dart';
+import 'package:toast/toast.dart';
 
 // ignore: camel_case_types
 class productList extends StatelessWidget {
@@ -116,6 +117,10 @@ class productList extends StatelessWidget {
                           icon: Icon(Icons.delete,color: Color(0xFF45A29E) ,),
                           onPressed: () {
                             Hive.box('product').deleteAt(index);
+                            Toast.show("Produit supprimé avec succès", context,
+                                duration: 2,
+                                gravity:  Toast.BOTTOM,
+                                textColor: Color(0xFF66FCF1));;
                           },
                         ),
                       )
