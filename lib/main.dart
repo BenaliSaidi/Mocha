@@ -7,7 +7,9 @@ import 'package:mocha/model/productList.dart';
 import 'package:mocha/model/statList.dart';
 import 'package:mocha/ActiveAccount.dart';
 import 'package:mocha/model/endtime.dart';
+import 'package:mocha/model/unitproduct.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'model/lastuse.dart';
 
 
 void main() async {
@@ -17,45 +19,53 @@ void main() async {
   Hive.init(appDocumentDirectory.path);
   Hive.registerAdapter(NewListAdapter());
   Hive.registerAdapter(NewProductAdapter());
+  Hive.registerAdapter(UnitAdapter());
   Hive.registerAdapter(PeriodAdapter());
+  Hive.registerAdapter(LastDateAdapter());
 
   await Hive.openBox('product');
   await Hive.openBox('counterMorning');
   await Hive.openBox('counterEvening');
   await Hive.openBox('statMorning');
   await Hive.openBox('statEvening');
+  await Hive.openBox('unitMorning');
   await Hive.openBox('period');
-
-// runApp(MaterialApp(home: Home(),));
-
-
+  await Hive.openBox('useperiod');
+  await Hive.openBox('unitTotalMorning');
 
 
-    var test = Hive.box('period').get('time').endtime;
-
-    if((DateTime.now().isAfter(test) == true)) {
-      runApp(MaterialApp(home: ActiveAccount(),));
+    var time = DateTime.now() ;
+    // ignore: non_constant_identifier_names
+    void FirstUse (LastDate last){
+      Hive.box('useperiod').put('lastTimeUse', last);
     }
-    else{
+    void addFirstPeriod(Period period){
+      Hive.box('period').put('time', period);
+    }
+
+    if(Hive.box('useperiod').isEmpty){
+      final lastuse = LastDate(time);
+      FirstUse(lastuse);
+    }
+
+    // ignore: unrelated_type_equality_checks
+    if(Hive.box('period').isEmpty){
+      final dateinit = time.add(Duration(days: 5));
+      final firstperiod = Period(dateinit);
+      addFirstPeriod(firstperiod);
+    }
+  var dateExp = Hive.box('period').get('time').endtime;
+  var checkTime = Hive.box('useperiod').get('lastTimeUse').lastuse;
+
+    if(DateTime.now().isAfter(checkTime) == true  && DateTime.now().isBefore(dateExp) == true  ){
+      Hive.box('useperiod').clear();
+      final lastuse = LastDate(DateTime.now());
+      FirstUse(lastuse);
       runApp(MaterialApp(home: Home(),));
     }
-
-
-
-
-
-  // runApp(MaterialApp(
-  //
-  //   initialRoute: '/home' ,
-  //   routes: {
-  //     '/home' : (context) => Home(),
-  //     '/addnewproduct' : (context) => AddProduct(),
-  //     '/displayProductList' : (context) => productList(),
-  //     '/CounterMenu' : (context) => CounterMenu(),
-  //
-  //   },
-  // ),
-  // );
+    else{
+      runApp(MaterialApp(home: ActiveAccount(),));
+    }
 }
 
 

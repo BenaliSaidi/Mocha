@@ -5,14 +5,9 @@ import 'package:hive/hive.dart';
 import 'package:mocha/model/statList.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import 'package:flutter_paginator/flutter_paginator.dart';
-import 'package:flutter_paginator/enums.dart';
 
-
+// ignore: must_be_immutable
 class Stat extends StatelessWidget {
-
-  ScrollController _scrollController = ScrollController();
-  int _currentMax = 10;
 
   @override
   Widget build(BuildContext context) {

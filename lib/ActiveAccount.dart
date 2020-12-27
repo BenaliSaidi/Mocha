@@ -23,34 +23,24 @@ class _ActiveAccountState extends State<ActiveAccount> {
 
 
   void addNewPeriod(Period period){
-    List time = [] ;
-    // ignore: non_constant_identifier_names
     Hive.box('period').delete('time');
     Hive.box('period').put('time', period);
-    var pricesList = Hive.box('period').values.toList() ;
-    pricesList.forEach((item) => time.add(item.endtime));
-    print('item ' +time.toString());
-    print('lenght of box ' + (Hive.box('period').length).toString());
   }
 
-
   displayEndTime(){
-    var expdate = Hive.box('period').get('time') ;
+    var expdate = Hive.box('period').get('time').endtime ;
     var formatter = new DateFormat('yyyy-MM-dd');
-    String formatted = formatter.format(expdate.endtime);
-    // List timeee = [] ;
-    // pricesList.forEach((item) => timeee.add(item.endtime));
+    var formatted = formatter.format(expdate);
     print(formatted);
      return formatted;
-}
+  }
 
   displayDifference(){
-    var expdate = Hive.box('period').get('time') ;
-    var diff = (expdate.endtime).difference(DateTime.now());
+    var expdate = Hive.box('period').get('time').endtime ;
+    var diff = (expdate).difference(DateTime.now());
     print(diff.inDays);
     return diff.inDays ;
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mocha/CounterMenu.dart';
 import 'package:mocha/model/productList.dart';
 import 'package:mocha/model/statList.dart';
 import 'package:toast/toast.dart';
+import 'package:vibration/vibration.dart';
 
 List<int> prices = [];
 List<int> benefit = [];
@@ -133,14 +133,17 @@ class _CounterEveningState extends State<CounterEvening> {
                                   else{
                                     final listeStat = NewList(calculatePrice(),calculateBenefit(),timeNow());
                                     addNewMorningStat(listeStat);
+
                                     Hive.box('counterEvening').clear();
+
                                     setState(() {
                                       calculatePrice();
                                     });
-                                    Toast.show("Bravo vous avez clôturé la journée", context,
-                                        duration: 3,
-                                        gravity:  Toast.CENTER,
-                                        textColor: Color(0xFF66FCF1));
+
+                                    // Toast.show("Bravo vous avez clôturé la journée", context,
+                                    //     duration: 3,
+                                    //     gravity:  Toast.CENTER,
+                                    //     textColor: Color(0xFF66FCF1));
                                   }
 
                                 },
@@ -169,6 +172,7 @@ class _CounterEveningState extends State<CounterEvening> {
                             setState(() {
                               calculatePrice();
                             });
+                            Vibration.vibrate(duration: 100);
                           },
                           child:
                           Card(

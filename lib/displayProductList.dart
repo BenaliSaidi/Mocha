@@ -120,7 +120,7 @@ class productList extends StatelessWidget {
                             Toast.show("Produit supprimé avec succès", context,
                                 duration: 2,
                                 gravity:  Toast.BOTTOM,
-                                textColor: Color(0xFF66FCF1));;
+                                textColor: Color(0xFF66FCF1));
                           },
                         ),
                       )
