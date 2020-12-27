@@ -178,7 +178,6 @@ class _CounterMorningState extends State<CounterMorning> {
                                   final listeStat = NewList(calculatePrice(),calculateBenefit(),timeNow());
                                   addNewMorningStat(listeStat);
                                   Hive.box('counterMorning').clear();
-
                                   setState(() {
                                     calculatePrice();
                                   });
@@ -187,7 +186,6 @@ class _CounterMorningState extends State<CounterMorning> {
                                       gravity:  Toast.CENTER,
                                       textColor: Color(0xFF66FCF1));
                                 }
-
                               },
                             ),
                       ],
@@ -198,12 +196,18 @@ class _CounterMorningState extends State<CounterMorning> {
             ),
             Container(
               child: GridView.count(
+                padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                mainAxisSpacing: 3.0,
+                crossAxisSpacing: 3.0,
                 scrollDirection: Axis.vertical,
                 crossAxisCount: 5 ,
                 children: List.generate(Hive.box('product').length,(index){
                   final products = Hive.box('product').getAt(index) as NewProduct;
-                  return GestureDetector(
-                    onTap: (){
+                  return RaisedButton(
+                    splashColor:Color(0xFF45A29E),
+                    color: Color(0xFF15171e),
+                    padding: EdgeInsets.zero,
+                    onPressed: (){
                       final newproduct =
                       NewProduct(products.name, products.buyingPrice , products.sellingPrice , products.benefit);
                       addNewProductToCounter(newproduct);
@@ -214,19 +218,10 @@ class _CounterMorningState extends State<CounterMorning> {
                       Vibration.vibrate(duration: 100);
                       clearOldUNit();
                     },
-
                     child:
-                    Card(
-                        color:Color(0xFF15171e),
-                        child: Container(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child : Text(products.name,
-                                style: TextStyle(fontSize:14 , color: Colors.white70),
-                                textAlign:TextAlign.center,
-                              ),
-                            )
-                        )
+                    Text(products.name,
+                      style: TextStyle(fontSize:14 , color: Colors.white70),
+                      textAlign:TextAlign.center,
                     ),
                   );
                 }
@@ -268,9 +263,13 @@ class _CounterMorningState extends State<CounterMorning> {
                       color: Color(0xFF0B0C10),
                       child: Text('Actualisez' ,style: TextStyle(fontSize: 25 , color:Color(0xFF45A29E) ),),
                       onPressed:(){
-                      setState(() {
-                        RetrieveUnit();
-                      });
+                        setState(() {
+                          if( Hive.box('unitMorning').length == 0){ RetrieveUnit();}
+                          else {Toast.show("Ajoutez d'abord un prosuit SVP", context,
+                              duration: 3,
+                              gravity:  Toast.CENTER,
+                              textColor: Color(0xFF66FCF1));}
+                        });
 
                     },),
                   )
