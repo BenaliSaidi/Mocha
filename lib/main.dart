@@ -29,6 +29,7 @@ void main() async {
   await Hive.openBox('statMorning');
   await Hive.openBox('statEvening');
   await Hive.openBox('unitMorning');
+  await Hive.openBox('unitEvening');
   await Hive.openBox('period');
   await Hive.openBox('useperiod');
   await Hive.openBox('unitTotalMorning');

@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -11,20 +8,16 @@ import 'package:mocha/model/unitproduct.dart';
 import 'package:toast/toast.dart';
 import 'package:vibration/vibration.dart';
 
-
-
-
 List<int> prices = [];
 List<int> benefit = [];
 List<String> unite = [];
 
-
 var newFormat = DateFormat("yyyy-MM-dd");
-
 
 timeNow(){
   return newFormat.format(DateTime.now());
 }
+
 
 void addNewProductToCounter (NewProduct product) {
   final productsBox = Hive.box('counterEvening');
@@ -201,6 +194,9 @@ class _CounterEveningState extends State<CounterEvening> {
                 ),
                 Container(
                   child: GridView.count(
+                    padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
+                    mainAxisSpacing: 3.0,
+                    crossAxisSpacing: 3.0,
                     scrollDirection: Axis.vertical,
                     crossAxisCount: 5 ,
                     children: List.generate(Hive.box('product').length,(index){

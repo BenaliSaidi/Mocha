@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mocha/displayProductList.dart';
 import 'package:mocha/CounterMenu.dart';
 import 'package:mocha/stat.dart';
-
 import 'ActiveAccount.dart';
 
 void main() => runApp(MaterialApp(home: Home(),));
@@ -95,7 +94,7 @@ class Home extends StatelessWidget {
               splashColor:Color(0xFF45A29E),
               highlightedBorderColor: Color(0xFF0B0C10),
               padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
-              child: Text("ActiveAccount" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
+              child: Text("Abonnement" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
               borderSide: BorderSide(
                 color: Color(0xFF66FCF1),
               ),
