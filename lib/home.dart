@@ -4,35 +4,43 @@ import 'package:mocha/CounterMenu.dart';
 import 'package:mocha/stat.dart';
 import 'ActiveAccount.dart';
 
-void main() => runApp(MaterialApp(home: Home(),));
+void main() => runApp(MaterialApp(
+      home: Home(),
+    ));
+
+Color backgroundcolor = Color(0xFFececec);
+Color appbarcolor = Color(0xFF0a0a0a);
+Color buttoncolor = Color(0xFF0a0a0a);
 
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1F2833),
+      backgroundColor: backgroundcolor,
       appBar: AppBar(
         title: Text(
           'Mocha',
-          style: TextStyle(
-              fontSize: 30 , color: Color(0xFF66FCF1)
-          ),),
+          style: TextStyle(fontSize: 30, color: backgroundcolor),
+        ),
         centerTitle: true,
-        backgroundColor: Color(0xFF0B0C10),
+        backgroundColor: appbarcolor,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 30 , 0),
+            margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton(
-              splashColor:Color(0xFF45A29E),
-              highlightedBorderColor:  Color(0xFF1F2833),
+              splashColor: Color(0xFFa7a7a7),
+              highlightedBorderColor: buttoncolor,
               padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-              child: Text("Produits" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
+              child: Text(
+                "Produits",
+                style: TextStyle(fontSize: 28, color: buttoncolor),
+              ),
               borderSide: BorderSide(
-                color: Color(0xFF66FCF1),
+                color: buttoncolor,
               ),
               onPressed: () {
                 Navigator.push(
@@ -40,21 +48,26 @@ class Home extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => productList()),
                 );
               },
-
             ),
           ),
           SizedBox(
             height: 20,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 30 , 0),
+            margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton(
-              splashColor:Color(0xFF45A29E),
-              highlightedBorderColor: Color(0xFF0B0C10),
+              splashColor: Color(0xFFa7a7a7),
+              highlightedBorderColor: buttoncolor,
               padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-              child: Text("Comptoir" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
+              child: Text(
+                "Commandes",
+                style: TextStyle(
+                  fontSize: 28,
+                  color: buttoncolor,
+                ),
+              ),
               borderSide: BorderSide(
-                color: Color(0xFF66FCF1),
+                color: buttoncolor,
               ),
               onPressed: () {
                 Navigator.push(
@@ -68,14 +81,20 @@ class Home extends StatelessWidget {
             height: 20,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 30 , 0),
+            margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton(
-              splashColor:Color(0xFF45A29E),
-              highlightedBorderColor: Color(0xFF0B0C10),
+              splashColor: Color(0xFFa7a7a7),
+              highlightedBorderColor: buttoncolor,
               padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-              child: Text("Statistiques" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
+              child: Text(
+                "Statistiques",
+                style: TextStyle(
+                  fontSize: 28,
+                  color: buttoncolor,
+                ),
+              ),
               borderSide: BorderSide(
-                color: Color(0xFF66FCF1),
+                color: buttoncolor,
               ),
               onPressed: () {
                 Navigator.push(
@@ -89,14 +108,20 @@ class Home extends StatelessWidget {
             height: 20,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 30 , 0),
+            margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton(
-              splashColor:Color(0xFF45A29E),
-              highlightedBorderColor: Color(0xFF0B0C10),
+              splashColor: Color(0xFFa7a7a7),
+              highlightedBorderColor: buttoncolor,
               padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
-              child: Text("Abonnement" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
+              child: Text(
+                "Abonnement",
+                style: TextStyle(
+                  fontSize: 28,
+                  color: buttoncolor,
+                ),
+              ),
               borderSide: BorderSide(
-                color: Color(0xFF66FCF1),
+                color: buttoncolor,
               ),
               onPressed: () {
                 Navigator.push(
@@ -106,7 +131,6 @@ class Home extends StatelessWidget {
               },
             ),
           ),
-
         ],
       ),
     );

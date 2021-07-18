@@ -6,6 +6,9 @@ import 'package:hive/hive.dart';
 import 'package:mocha/model/productList.dart';
 import 'package:toast/toast.dart';
 
+Color backgroundcolor = Color(0xFFececec);
+Color appbarcolor = Color(0xFF0a0a0a);
+Color buttoncolor = Color(0xFF0a0a0a);
 
 class AddProduct extends StatefulWidget {
   @override
@@ -18,7 +21,7 @@ class _AddProductState extends State<AddProduct> {
   String _buyingPrice;
   String _sellingPrice;
 
-  void addNewProduct (NewProduct product){
+  void addNewProduct(NewProduct product) {
     final productsBox = Hive.box('product');
     productsBox.add(product);
   }
@@ -26,16 +29,15 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFF1F2833),
+      backgroundColor: backgroundcolor,
       appBar: AppBar(
-      title: Text(
-        'Mocha',
-        style: TextStyle(
-            fontSize: 30 , color: Color(0xFF66FCF1)
-        ),),
-      centerTitle: true,
-      backgroundColor: Color(0xFF0B0C10),
-    ),
+        title: Text(
+          'Mocha',
+          style: TextStyle(fontSize: 30, color: backgroundcolor),
+        ),
+        centerTitle: true,
+        backgroundColor: Color(0xFF0B0C10),
+      ),
       body: Container(
         padding: EdgeInsets.fromLTRB(40.0, 60.0, 40.0, 00.0),
         child: SingleChildScrollView(
@@ -48,18 +50,16 @@ class _AddProductState extends State<AddProduct> {
                     keyboardType: TextInputType.text,
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.white70,
+                      color: buttoncolor,
                     ),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor : Colors.white10,
+                      fillColor: Colors.white10,
                       labelText: 'Nom',
-                      labelStyle: TextStyle(
-                          color: Color(0xFF66FCF1),fontSize: 13
-                      ),
+                      labelStyle: TextStyle(color: buttoncolor, fontSize: 13),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
-                        borderSide : BorderSide(width: 2,color: Color(0xFF66FCF1)),
+                        borderSide: BorderSide(width: 2, color: buttoncolor),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
@@ -71,26 +71,23 @@ class _AddProductState extends State<AddProduct> {
                       }
                       return null;
                     },
-
                     onSaved: (value) => _name = value,
                   ),
-                  SizedBox( height: 20),
+                  SizedBox(height: 20),
                   TextFormField(
                     keyboardType: TextInputType.number,
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.white70,
+                      color: buttoncolor,
                     ),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor : Colors.white10,
-                      labelText: 'Prix d\'achat ' ,
-                      labelStyle: TextStyle(
-                          color: Color(0xFF66FCF1),fontSize: 13
-                      ),
+                      fillColor: Colors.white10,
+                      labelText: 'Prix d\'achat ',
+                      labelStyle: TextStyle(color: buttoncolor, fontSize: 13),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
-                        borderSide : BorderSide(width: 2,color: Color(0xFF66FCF1)),
+                        borderSide: BorderSide(width: 2, color: buttoncolor),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
@@ -102,26 +99,25 @@ class _AddProductState extends State<AddProduct> {
                       }
                       return null;
                     },
-
                     onSaved: (value) => _buyingPrice = value,
                   ),
-                  SizedBox( height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   TextFormField(
                     keyboardType: TextInputType.number,
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.white70,
+                      color: buttoncolor,
                     ),
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor : Colors.white10,
+                      fillColor: Colors.white10,
                       labelText: 'Prix de vente',
-                      labelStyle: TextStyle(
-                          color: Color(0xFF66FCF1),fontSize: 13
-                      ),
+                      labelStyle: TextStyle(color: buttoncolor, fontSize: 13),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
-                        borderSide : BorderSide(width: 2,color: Color(0xFF66FCF1)),
+                        borderSide: BorderSide(width: 2, color: buttoncolor),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5.0),
@@ -133,41 +129,38 @@ class _AddProductState extends State<AddProduct> {
                       }
                       return null;
                     },
-
-
                     onSaved: (value) => _sellingPrice = value,
                   ),
-                  SizedBox( height: 20),
+                  SizedBox(height: 20),
                   RaisedButton(
-                    color: Color(0xFF66FCF1) ,
+                    color: buttoncolor,
                     padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
-                    onPressed: (){
+                    onPressed: () {
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                        final _benefit = int.parse(_sellingPrice) - int.parse(_buyingPrice);
+                        final _benefit =
+                            int.parse(_sellingPrice) - int.parse(_buyingPrice);
                         print(_benefit);
-                        final newproduct =
-                        NewProduct(_name, int.parse(_buyingPrice) , int.parse(_sellingPrice) , _benefit);
+                        final newproduct = NewProduct(
+                            _name,
+                            int.parse(_buyingPrice),
+                            int.parse(_sellingPrice),
+                            _benefit);
                         addNewProduct(newproduct);
                         _formKey.currentState.reset();
                         Toast.show("Produit sauvegardé avec succès", context,
                             duration: 2,
-                            gravity:  Toast.BOTTOM,
-                        textColor: Color(0xFF66FCF1));
+                            gravity: Toast.BOTTOM,
+                            textColor: Color(0xFF66FCF1));
                       }
-                      },
-                    child: Text('Sauvegarder' ,
-                        style: TextStyle(fontSize: 20  )),
+                    },
+                    child: Text('Sauvegarder',
+                        style: TextStyle(fontSize: 20, color: backgroundcolor)),
                   )
                 ],
-              )
-
-          ),
+              )),
         ),
       ),
     );
   }
 }
-
-
-

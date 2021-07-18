@@ -1,44 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:mocha/Tables.dart';
 import 'package:mocha/counterMorning.dart';
 import 'package:mocha/counterEvening.dart';
 
-//void main() => runApp(MaterialApp(home: Home(),));
+Color backgroundcolor = Color(0xFFececec);
+Color appbarcolor = Color(0xFF0a0a0a);
+Color buttoncolor = Color(0xFF0a0a0a);
 
 class CounterMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1F2833),
+      backgroundColor: backgroundcolor,
       appBar: AppBar(
         title: Text(
           'Mocha',
-          style: TextStyle(
-              fontSize: 30 , color: Color(0xFF66FCF1)
-          ),),
+          style: TextStyle(fontSize: 30, color: backgroundcolor),
+        ),
         centerTitle: true,
-        backgroundColor: Color(0xFF0B0C10),
+        backgroundColor: appbarcolor,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 30 , 0),
+            margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton.icon(
-              splashColor:Color(0xFF45A29E),
-              highlightedBorderColor:  Color(0xFF45A29E),
+              splashColor: Color(0xFF45A29E),
+              highlightedBorderColor: buttoncolor,
               padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-              label: Text(" Matin" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
-              borderSide: BorderSide(
-                color: Color(0xFF66FCF1),
+              label: Text(
+                " Matin",
+                style: TextStyle(fontSize: 28, color: buttoncolor),
               ),
-              icon:Icon(Icons.wb_sunny,color: Color(0xFF66FCF1)) ,
+              borderSide: BorderSide(
+                color: buttoncolor,
+              ),
+              icon: Icon(Icons.wb_sunny, color: buttoncolor),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => CounterMorning()),
                 );
-
               },
             ),
           ),
@@ -46,24 +50,30 @@ class CounterMenu extends StatelessWidget {
             height: 20,
           ),
           Container(
-            margin: EdgeInsets.fromLTRB(30, 0, 30 , 0),
+            margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton.icon(
-              splashColor:Color(0xFF45A29E),
-              highlightedBorderColor: Color(0xFF0B0C10),
+              splashColor: Color(0xFF45A29E),
+              highlightedBorderColor: buttoncolor,
               padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-              label: Text("Soir" , style: TextStyle(fontSize: 28, color: Color(0xFF66FCF1) ),),
-              borderSide: BorderSide(color: Color(0xFF66FCF1),),
+              label: Text(
+                "Soir",
+                style: TextStyle(fontSize: 28, color: buttoncolor),
+              ),
+              borderSide: BorderSide(
+                color: buttoncolor,
+              ),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CounterEvening()),
+                  MaterialPageRoute(builder: (context) => Tables()),
                 );
-
               },
-              icon:Icon(Icons.nights_stay,color: Color(0xFF66FCF1),) ,
+              icon: Icon(
+                Icons.nights_stay,
+                color: buttoncolor,
+              ),
             ),
           ),
-
         ],
       ),
     );
