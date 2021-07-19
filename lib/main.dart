@@ -6,7 +6,7 @@ import 'package:hive/hive.dart';
 import 'package:mocha/model/productList.dart';
 import 'package:mocha/model/statList.dart';
 import 'package:mocha/ActiveAccount.dart';
-import 'package:mocha/Tables.dart';
+import 'package:mocha/TablesEvening.dart';
 import 'package:mocha/model/endtime.dart';
 import 'package:mocha/model/unitproduct.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -44,9 +44,9 @@ void main() async {
   await Hive.openBox('unitEvening');
   await Hive.openBox('period');
   await Hive.openBox('useperiod');
-  await Hive.openBox('unitTotalMorning');
-  await Hive.openBox('order');
+  await Hive.openBox('TotalunitMorning');
   await Hive.openBox('TotalunitEvening');
+  await Hive.openBox('order');
 
   var time = DateTime.now();
   // ignore: non_constant_identifier_names

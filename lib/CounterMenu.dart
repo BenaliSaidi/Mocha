@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mocha/Tables.dart';
-import 'package:mocha/counterMorning.dart';
-import 'package:mocha/counterEvening.dart';
+import 'package:mocha/TablesEvening.dart';
+import 'TablesMorning.dart';
 
 Color backgroundcolor = Color(0xFFececec);
 Color appbarcolor = Color(0xFF0a0a0a);
@@ -41,7 +40,7 @@ class CounterMenu extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CounterMorning()),
+                  MaterialPageRoute(builder: (context) => TablesMorning()),
                 );
               },
             ),
@@ -65,7 +64,7 @@ class CounterMenu extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Tables()),
+                  MaterialPageRoute(builder: (context) => TablesEvening()),
                 );
               },
               icon: Icon(

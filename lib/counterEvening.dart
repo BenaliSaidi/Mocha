@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mocha/model/productList.dart';
-import 'package:mocha/model/statList.dart';
+
 import 'package:mocha/model/unitproduct.dart';
 import 'package:toast/toast.dart';
 import 'package:vibration/vibration.dart';
@@ -14,21 +13,6 @@ Size displaySize(BuildContext context) {
   print('Size = ' + MediaQuery.of(context).size.toString());
   print(MediaQuery.of(context).size.toString());
   return MediaQuery.of(context).size;
-}
-
-double displayHeight(BuildContext context) {
-  print('Height = ' + displaySize(context).height.toString());
-  return displaySize(context).height;
-}
-
-double displayWidth(BuildContext context) {
-  print('Width = ' + displaySize(context).width.toString());
-  return displaySize(context).width;
-}
-
-void test(BuildContext context) {
-  var a = MediaQuery.of(context).size.toString();
-  print(a);
 }
 
 List<dynamic> listToDelete = [];
@@ -49,6 +33,8 @@ List<dynamic> filtre = [];
 Color backgroundcolor = Color(0xFFececec);
 Color appbarcolor = Color(0xFF0a0a0a);
 Color buttoncolor = Color(0xFF0a0a0a);
+int row;
+double font;
 
 var newFormat = DateFormat("yyyy-MM-dd");
 
@@ -98,6 +84,30 @@ class CounterEvening extends StatefulWidget {
 class _CounterEveningState extends State<CounterEvening> {
   String value;
   _CounterEveningState({this.value});
+
+  int GridViewlayout() {
+    if (displaySize(context).width < 400) {
+      row = 5;
+    } else if (400 < displaySize(context).width &&
+        800 > displaySize(context).width) {
+      row = 7;
+    } else {
+      row = 10;
+    }
+    return row;
+  }
+
+  double fontsize() {
+    if (displaySize(context).width < 400) {
+      font = 16;
+    } else if (400 < displaySize(context).width &&
+        800 > displaySize(context).width) {
+      font = 20;
+    } else {
+      font = 23;
+    }
+    return font;
+  }
 
   RetrieveUnit() {
     var map = Map();
@@ -200,7 +210,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                 width: 90,
                                 child: Text('Article',
                                     style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: fontsize(),
                                         color: Colors.teal,
                                         fontWeight: FontWeight.bold)),
                               ),
@@ -210,7 +220,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                 child: Text(
                                   'Prix',
                                   style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: fontsize(),
                                       color: Colors.teal,
                                       fontWeight: FontWeight.bold),
                                 ),
@@ -259,7 +269,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                 child: Text(
                                   "clôturer",
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 16,
                                     color: Colors.black,
                                   ),
                                 ),
@@ -325,7 +335,7 @@ class _CounterEveningState extends State<CounterEvening> {
                     mainAxisSpacing: 3.0,
                     crossAxisSpacing: 3.0,
                     scrollDirection: Axis.vertical,
-                    crossAxisCount: 5,
+                    crossAxisCount: GridViewlayout(),
                     children:
                         List.generate(Hive.box('product').length, (index) {
                       final products = Hive.box('product').getAt(index);
@@ -377,7 +387,8 @@ class _CounterEveningState extends State<CounterEvening> {
                         },
                         child: Text(
                           products.name,
-                          style: TextStyle(fontSize: 14, color: Colors.white),
+                          style: TextStyle(
+                              fontSize: fontsize(), color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       );
@@ -400,7 +411,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                   width: 130,
                                   child: Text('Article',
                                       style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: fontsize(),
                                           color: Color(0xFF45A29E),
                                           fontWeight: FontWeight.bold)),
                                 ),
@@ -410,7 +421,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                   child: Text(
                                     'Unités',
                                     style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: fontsize(),
                                         color: Color(0xFF45A29E),
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -498,7 +509,7 @@ class _CounterEveningState extends State<CounterEvening> {
                         width: 90,
                         child: Text('${productname[index]}'.toString(),
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 16,
                               color: Colors.black,
                             ),
                             textAlign: TextAlign.center),
@@ -508,7 +519,7 @@ class _CounterEveningState extends State<CounterEvening> {
                         width: 50,
                         child: Text('${productsellingprice[index]}'.toString(),
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 16,
                               color: Colors.black,
                             ),
                             textAlign: TextAlign.left),

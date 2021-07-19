@@ -16,22 +16,13 @@ Size displaySize(BuildContext context) {
   return MediaQuery.of(context).size;
 }
 
-double displayHeight(BuildContext context) {
-  print('Height = ' + displaySize(context).height.toString());
-  return displaySize(context).height;
-}
-
-double displayWidth(BuildContext context) {
-  print('Width = ' + displaySize(context).width.toString());
-  return displaySize(context).width;
-}
-
 List<int> totalprices = [];
 List<int> totalbenefits = [];
 Color backgroundcolor = Color(0xFFececec);
 Color appbarcolor = Color(0xFF0a0a0a);
 Color buttoncolor = Color(0xFF0a0a0a);
-Color colorTable = Colors.teal;
+Color colorTable;
+var size = 0;
 
 // ignore: non_constant_identifier_names
 
@@ -39,6 +30,20 @@ void addNewEveningStat(NewList stat) {
   Hive.openBox('statEvening');
   final statBox = Hive.box('statEvening');
   statBox.add(stat);
+}
+
+Color tableColor(tableNum) {
+  var size = Hive.box('order')
+      .values
+      .where((order) => order.tables == tableNum)
+      .toList()
+      .length;
+  if (size == 0) {
+    colorTable = Colors.teal[300];
+  } else {
+    colorTable = Colors.red[400];
+  }
+  return colorTable;
 }
 
 timeNow() {
@@ -72,16 +77,52 @@ calculateTotalBenefit() {
   return sumTB;
 }
 
-void main() => runApp(MaterialApp(home: Tables()));
-
-class Tables extends StatefulWidget {
+class TablesEvening extends StatefulWidget {
   @override
-  _TablesState createState() => _TablesState();
+  _TablesEveningState createState() => _TablesEveningState();
 }
 
-class _TablesState extends State<Tables> {
+class _TablesEveningState extends State<TablesEvening> {
   final _formKey = GlobalKey<FormState>();
   String name;
+
+  Color tableColor(tableNum) {
+    var size = Hive.box('order')
+        .values
+        .where((order) => order.tables == tableNum)
+        .toList()
+        .length;
+    if (size == 0) {
+      colorTable = Colors.teal[300];
+    } else {
+      colorTable = Colors.red[400];
+    }
+    return colorTable;
+  }
+
+  int gridViewlayout() {
+    if (displaySize(context).width < 400) {
+      row = 4;
+    } else if (400 < displaySize(context).width &&
+        800 > displaySize(context).width) {
+      row = 6;
+    } else {
+      row = 8;
+    }
+    return row;
+  }
+
+  double fontsize() {
+    if (displaySize(context).width < 400) {
+      font = 16;
+    } else if (400 < displaySize(context).width &&
+        800 > displaySize(context).width) {
+      font = 20;
+    } else {
+      font = 23;
+    }
+    return font;
+  }
 
   void addNewTable(Tableslist table) {
     final tableBox = Hive.box('table');
@@ -123,7 +164,7 @@ class _TablesState extends State<Tables> {
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
                       'Comptoir',
-                      style: TextStyle(fontSize: displayWidth(context) * 0.08),
+                      style: TextStyle(fontSize: fontsize()),
                     ),
                   )),
             ),
@@ -131,7 +172,7 @@ class _TablesState extends State<Tables> {
               height: 10,
             ),
             ValueListenableBuilder(
-                valueListenable: Hive.box('table').listenable(),
+                valueListenable: Hive.box('order').listenable(),
                 builder: (context, box, widget) {
                   return Container(
                       padding: EdgeInsets.fromLTRB(30, 0, 30, 20),
@@ -140,7 +181,7 @@ class _TablesState extends State<Tables> {
                         primary: false,
                         crossAxisSpacing: 5,
                         mainAxisSpacing: 5,
-                        crossAxisCount: 4,
+                        crossAxisCount: gridViewlayout(),
                         children:
                             List.generate(Hive.box('table').length, (index) {
                           final table =
@@ -169,6 +210,7 @@ class _TablesState extends State<Tables> {
                                                       textColor:
                                                           Color(0xFF66FCF1));
                                                   Navigator.pop(context);
+                                                  setState(() {});
                                                 },
                                                 child: Text('OUI'))
                                           ],
@@ -178,7 +220,7 @@ class _TablesState extends State<Tables> {
                                   });
                             },
                             splashColor: Color(0xFF45A29E),
-                            color: Colors.teal[300],
+                            color: tableColor(table.name),
                             padding: EdgeInsets.zero,
                             onPressed: () {
                               Navigator.push(
@@ -191,8 +233,7 @@ class _TablesState extends State<Tables> {
                             child: Text(
                               table.name,
                               style: TextStyle(
-                                  fontSize: displayWidth(context) * 0.08,
-                                  color: Colors.black),
+                                  fontSize: fontsize(), color: Colors.black),
                               textAlign: TextAlign.center,
                             ),
                           );
@@ -202,6 +243,7 @@ class _TablesState extends State<Tables> {
             Padding(
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     OutlinedButton(
                         onPressed: () {
@@ -245,7 +287,8 @@ class _TablesState extends State<Tables> {
                           padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                           child: Text(
                             'Cloturer la journée',
-                            style: TextStyle(fontSize: 18, color: Colors.white),
+                            style: TextStyle(
+                                fontSize: fontsize(), color: Colors.white),
                           ),
                         )),
                     SizedBox(
@@ -344,6 +387,7 @@ class _TablesState extends State<Tables> {
                                           duration: 1,
                                           gravity: Toast.BOTTOM,
                                           textColor: Color(0xFF66FCF1));
+                                      setState(() {});
                                     }
                                   },
                                   child: Text('Sauvegarder',

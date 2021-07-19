@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mocha/displayProductList.dart';
 import 'package:mocha/CounterMenu.dart';
 import 'package:mocha/stat.dart';
+import 'package:mocha/userConfirmation.dart';
+import 'package:toast/toast.dart';
 import 'ActiveAccount.dart';
 
 void main() => runApp(MaterialApp(
@@ -13,6 +15,8 @@ Color appbarcolor = Color(0xFF0a0a0a);
 Color buttoncolor = Color(0xFF0a0a0a);
 
 class Home extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+  String statKey;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,26 +87,25 @@ class Home extends StatelessWidget {
           Container(
             margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton(
-              splashColor: Color(0xFFa7a7a7),
-              highlightedBorderColor: buttoncolor,
-              padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-              child: Text(
-                "Statistiques",
-                style: TextStyle(
-                  fontSize: 28,
+                splashColor: Color(0xFFa7a7a7),
+                highlightedBorderColor: buttoncolor,
+                padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
+                child: Text(
+                  "Statistiques",
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: buttoncolor,
+                  ),
+                ),
+                borderSide: BorderSide(
                   color: buttoncolor,
                 ),
-              ),
-              borderSide: BorderSide(
-                color: buttoncolor,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Stat()),
-                );
-              },
-            ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => UserConfirmation()),
+                  );
+                }),
           ),
           SizedBox(
             height: 20,
