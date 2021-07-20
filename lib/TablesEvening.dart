@@ -135,7 +135,7 @@ class _TablesEveningState extends State<TablesEvening> {
       backgroundColor: backgroundcolor,
       appBar: AppBar(
         title: Text(
-          'Mocha',
+          'SoiR',
           style: TextStyle(fontSize: 30, color: backgroundcolor),
         ),
         centerTitle: true,
@@ -164,7 +164,11 @@ class _TablesEveningState extends State<TablesEvening> {
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
                       'Comptoir',
-                      style: TextStyle(fontSize: fontsize()),
+                      style: TextStyle(
+                        fontSize: fontsize(),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Comfortaa',
+                      ),
                     ),
                   )),
             ),
@@ -233,7 +237,11 @@ class _TablesEveningState extends State<TablesEvening> {
                             child: Text(
                               table.name,
                               style: TextStyle(
-                                  fontSize: fontsize(), color: Colors.black),
+                                fontSize: fontsize(),
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Comfortaa',
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           );
@@ -243,17 +251,16 @@ class _TablesEveningState extends State<TablesEvening> {
             Padding(
                 padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     OutlinedButton(
                         onPressed: () {
                           if (Hive.box('Paidproduct').isEmpty) {
-                            print('veuillez d\'abord cloturer les tables SVP ');
+                            print('veuillez d\'abord clôturer les tables SVP ');
                             if (Hive.box('order').isNotEmpty) {
                               print(
-                                  'veuillez d\'abord cloturer les tables SVP ');
+                                  'veuillez d\'abord clôturer les tables SVP ');
                             }
-                            Toast.show("veuillez d\'abord cloturer les tables ",
+                            Toast.show("veuillez d\'abord clôturer les tables ",
                                 context,
                                 duration: 1,
                                 gravity: Toast.CENTER,
@@ -286,7 +293,7 @@ class _TablesEveningState extends State<TablesEvening> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                           child: Text(
-                            'Cloturer la journée',
+                            'Clôturer la journée',
                             style: TextStyle(
                                 fontSize: fontsize(), color: Colors.white),
                           ),

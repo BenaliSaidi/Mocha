@@ -163,7 +163,6 @@ class _CounterMorningState extends State<CounterMorning> {
     return sumB;
   }
 
-  final _formKey = GlobalKey<FormState>();
   String name;
 
   @override
@@ -266,7 +265,7 @@ class _CounterMorningState extends State<CounterMorning> {
                                 splashColor: Color(0xFF45A29E),
                                 highlightedBorderColor: Color(0xFF45A29E),
                                 child: Text(
-                                  "clôturer",
+                                  "Clôturer",
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.black,
@@ -387,7 +386,10 @@ class _CounterMorningState extends State<CounterMorning> {
                         child: Text(
                           products.name,
                           style: TextStyle(
-                              fontSize: fontsize(), color: Colors.white),
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Recursive',
+                              fontSize: fontsize(),
+                              color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       );
@@ -508,6 +510,8 @@ class _CounterMorningState extends State<CounterMorning> {
                         width: 90,
                         child: Text('${productname[index]}'.toString(),
                             style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Comfortaa',
                               fontSize: 16,
                               color: Colors.black,
                             ),
@@ -518,6 +522,8 @@ class _CounterMorningState extends State<CounterMorning> {
                         width: 50,
                         child: Text('${productsellingprice[index]}'.toString(),
                             style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Comfortaa',
                               fontSize: 16,
                               color: Colors.black,
                             ),

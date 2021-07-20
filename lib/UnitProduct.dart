@@ -11,6 +11,7 @@ import 'model/unitproduct.dart';
 
 List<dynamic> unites = [];
 List<dynamic> productList = [];
+List<dynamic> tprices = [];
 
 Color backgroundcolor = Color(0xFFececec);
 Color appbarcolor = Color(0xFF0a0a0a);
@@ -19,6 +20,20 @@ Color buttoncolor = Color(0xFF0a0a0a);
 void addNewUnit(TotalUnit totalunit) {
   final statBox = Hive.box('TotalunitEvening');
   statBox.add(totalunit);
+}
+
+int calculateUnitPrice() {
+  var pricesList = Hive.box('Paidproduct').values.toList();
+
+  tprices.clear();
+  if (tprices.isEmpty) {
+    tprices.add(0);
+  }
+  pricesList.forEach((item) => tprices.add(item.sellingPrice));
+  //print(prices);
+  int sumP = tprices.reduce((curr, next) => curr + next);
+  //print(sumP);
+  return sumP;
 }
 
 RetrieveUnit() {
@@ -108,11 +123,16 @@ class _UnitProductState extends State<UnitProduct> {
                 setState(() {
                   if (Hive.box('Paidproduct').length == 0) {
                     Toast.show("Ajoutez d'abord un prosuit SVP", context,
-                        duration: 1,
+                        duration: 2,
                         gravity: Toast.CENTER,
                         textColor: Color(0xFF66FCF1));
                   } else {
                     RetrieveUnit();
+                    Toast.show(
+                        calculateUnitPrice().toString() + ' DA ', context,
+                        duration: 1,
+                        gravity: Toast.BOTTOM,
+                        textColor: Color(0xFF66FCF1));
                   }
                 });
               },

@@ -267,7 +267,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                 splashColor: Color(0xFF45A29E),
                                 highlightedBorderColor: Color(0xFF45A29E),
                                 child: Text(
-                                  "clôturer",
+                                  "Clôturer",
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.black,
@@ -362,6 +362,7 @@ class _CounterEveningState extends State<CounterEvening> {
                               calculatePrice();
                             });
                             Vibration.vibrate(duration: 100);
+
                             clearOldUNit();
                           } else {
                             key.forEach((item) => allkeys.add(item.key));
@@ -382,13 +383,18 @@ class _CounterEveningState extends State<CounterEvening> {
                               calculatePrice();
                             });
                             Vibration.vibrate(duration: 100);
+
                             clearOldUNit();
                           }
                         },
                         child: Text(
                           products.name,
                           style: TextStyle(
-                              fontSize: fontsize(), color: Colors.white),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Recursive',
+                            fontSize: fontsize(),
+                            color: Colors.white,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       );
@@ -509,6 +515,8 @@ class _CounterEveningState extends State<CounterEvening> {
                         width: 90,
                         child: Text('${productname[index]}'.toString(),
                             style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Comfortaa',
                               fontSize: 16,
                               color: Colors.black,
                             ),
@@ -519,6 +527,8 @@ class _CounterEveningState extends State<CounterEvening> {
                         width: 50,
                         child: Text('${productsellingprice[index]}'.toString(),
                             style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Comfortaa',
                               fontSize: 16,
                               color: Colors.black,
                             ),

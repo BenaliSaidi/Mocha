@@ -31,6 +31,20 @@ void addNewMorningStat(NewList stat) {
   statBox.add(stat);
 }
 
+Color tableColor(tableNum) {
+  var size = Hive.box('order')
+      .values
+      .where((order) => order.tables == tableNum)
+      .toList()
+      .length;
+  if (size == 0) {
+    colorTable = Colors.teal[300];
+  } else {
+    colorTable = Colors.red[400];
+  }
+  return colorTable;
+}
+
 timeNow() {
   return newFormat.format(DateTime.now());
 }
@@ -108,7 +122,7 @@ class _TablesMorningState extends State<TablesMorning> {
       backgroundColor: backgroundcolor,
       appBar: AppBar(
         title: Text(
-          'Mocha',
+          'MatiN',
           style: TextStyle(fontSize: 30, color: backgroundcolor),
         ),
         centerTitle: true,
@@ -137,7 +151,11 @@ class _TablesMorningState extends State<TablesMorning> {
                     padding: const EdgeInsets.all(15.0),
                     child: Text(
                       'Comptoir',
-                      style: TextStyle(fontSize: fontsize()),
+                      style: TextStyle(
+                        fontSize: fontsize(),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Comfortaa',
+                      ),
                     ),
                   )),
             ),
@@ -145,7 +163,7 @@ class _TablesMorningState extends State<TablesMorning> {
               height: 10,
             ),
             ValueListenableBuilder(
-                valueListenable: Hive.box('table').listenable(),
+                valueListenable: Hive.box('order').listenable(),
                 builder: (context, box, widget) {
                   return Container(
                       padding: EdgeInsets.fromLTRB(30, 0, 30, 20),
@@ -183,6 +201,7 @@ class _TablesMorningState extends State<TablesMorning> {
                                                       textColor:
                                                           Color(0xFF66FCF1));
                                                   Navigator.pop(context);
+                                                  setState(() {});
                                                 },
                                                 child: Text('OUI'))
                                           ],
@@ -192,7 +211,7 @@ class _TablesMorningState extends State<TablesMorning> {
                                   });
                             },
                             splashColor: Color(0xFF45A29E),
-                            color: Colors.teal[300],
+                            color: tableColor(table.name),
                             padding: EdgeInsets.zero,
                             onPressed: () {
                               Navigator.push(
@@ -205,7 +224,11 @@ class _TablesMorningState extends State<TablesMorning> {
                             child: Text(
                               table.name,
                               style: TextStyle(
-                                  fontSize: fontsize(), color: Colors.black),
+                                fontSize: fontsize(),
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Comfortaa',
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           );
@@ -219,19 +242,17 @@ class _TablesMorningState extends State<TablesMorning> {
                     OutlinedButton(
                         onPressed: () {
                           if (Hive.box('Paidproduct').isEmpty) {
-                            print('veuillez d\'abord cloturer les tables SVP ');
+                            print('veuillez d\'abord clôturer les tables SVP ');
                             if (Hive.box('order').isNotEmpty) {
                               print(
-                                  'veuillez d\'abord cloturer les tables SVP ');
+                                  'veuillez d\'abord clôturer les tables SVP ');
                             }
-                            Toast.show("veuillez d\'abord cloturer les tables ",
+                            Toast.show("veuillez d\'abord clôturer les tables ",
                                 context,
                                 duration: 1,
                                 gravity: Toast.CENTER,
                                 textColor: Color(0xFF66FCF1));
                           } else {
-                            
-
                             final recette = NewList(calculateTotalPrice(),
                                 calculateTotalBenefit(), timeNow());
 
@@ -252,7 +273,7 @@ class _TablesMorningState extends State<TablesMorning> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                           child: Text(
-                            'Cloturer la journée',
+                            'Clôturer la journée',
                             style: TextStyle(
                                 fontSize: fontsize(), color: Colors.white),
                           ),
@@ -353,6 +374,7 @@ class _TablesMorningState extends State<TablesMorning> {
                                           duration: 1,
                                           gravity: Toast.BOTTOM,
                                           textColor: Color(0xFF66FCF1));
+                                      setState(() {});
                                     }
                                   },
                                   child: Text('Sauvegarder',
