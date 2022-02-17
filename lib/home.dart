@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:mocha/displayProductList.dart';
 import 'package:mocha/CounterMenu.dart';
 import 'package:mocha/stat.dart';
@@ -12,13 +13,25 @@ Size displaySize(BuildContext context) {
 }
 
 Color backgroundcolor = Color(0xFFececec);
+
 Color appbarcolor = Color(0xFF0a0a0a);
 Color buttoncolor = Color(0xFF0a0a0a);
 int row;
+String pass;
+String psw;
+
+String mdp() {
+  if (Hive.box('password').isNotEmpty) {
+    psw = Hive.box('password').getAt(0).pwd;
+  } else {
+    psw = 'admin';
+  }
+  return psw;
+}
 
 class Home extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
-  String statKey;
+  //String statKey;
   @override
   Widget build(BuildContext context) {
     int gridViewlayout() {
@@ -30,6 +43,8 @@ class Home extends StatelessWidget {
       return row;
     }
 
+    mdp();
+
     return Scaffold(
       backgroundColor: backgroundcolor,
       appBar: AppBar(
@@ -38,7 +53,7 @@ class Home extends StatelessWidget {
           style: TextStyle(fontSize: 30, color: backgroundcolor),
         ),
         centerTitle: true,
-        backgroundColor: appbarcolor,
+        backgroundColor: Color(0xFF455A64),
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(20, 60, 20, 0),
@@ -47,10 +62,93 @@ class Home extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => productList()),
-                );
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Container(
+                          height: 200,
+                          width: 200,
+                          padding: EdgeInsets.only(top: 30),
+                          child: Column(
+                            children: [
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      obscureText: true,
+                                      keyboardType: TextInputType.text,
+                                      style: TextStyle(
+                                        //fontSize: 20,
+                                        color: buttoncolor,
+                                      ),
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        filled: true,
+                                        fillColor: Colors.white10,
+                                        labelText: 'Password',
+                                        labelStyle: TextStyle(
+                                            color: buttoncolor, fontSize: 13),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          borderSide: BorderSide(
+                                              width: 2, color: buttoncolor),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                      ),
+                                      onSaved: (value) => pass = value,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                        }
+                                        if (value != psw) {
+                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: 30),
+                                    ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(buttoncolor)),
+                                        onPressed: () {
+                                          if (_formKey.currentState
+                                              .validate()) {
+                                            _formKey.currentState.save();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      productList()),
+                                            );
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 30, right: 30),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 13.0, bottom: 13),
+                                            child: Text(
+                                              '   vers produits   ',
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
               },
               child: Card(
                 child: Column(
@@ -99,10 +197,92 @@ class Home extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserConfirmation()),
-                );
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Container(
+                          height: 200,
+                          width: 200,
+                          padding: EdgeInsets.only(top: 30),
+                          child: Column(
+                            children: [
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      obscureText: true,
+                                      keyboardType: TextInputType.text,
+                                      style: TextStyle(
+                                        //fontSize: 20,
+                                        color: buttoncolor,
+                                      ),
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        filled: true,
+                                        fillColor: Colors.white10,
+                                        labelText: 'Password',
+                                        labelStyle: TextStyle(
+                                            color: buttoncolor, fontSize: 13),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          borderSide: BorderSide(
+                                              width: 2, color: buttoncolor),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                      ),
+                                      onSaved: (value) => pass = value,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                        }
+                                        if (value != psw) {
+                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: 30),
+                                    ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(buttoncolor)),
+                                        onPressed: () {
+                                          if (_formKey.currentState
+                                              .validate()) {
+                                            _formKey.currentState.save();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => Stat()),
+                                            );
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 30, right: 30),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 13.0, bottom: 13),
+                                            child: Text(
+                                              '   vers statistiques   ',
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
               },
               child: Card(
                 child: Column(
@@ -125,10 +305,97 @@ class Home extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ActiveAccount()),
-                );
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Container(
+                          height: 200,
+                          width: 200,
+                          padding: EdgeInsets.only(top: 30),
+                          child: Column(
+                            children: [
+                              Form(
+                                key: _formKey,
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      obscureText: true,
+                                      keyboardType: TextInputType.text,
+                                      style: TextStyle(
+                                        //fontSize: 20,
+                                        color: buttoncolor,
+                                      ),
+                                      decoration: InputDecoration(
+                                        isDense: true,
+                                        filled: true,
+                                        fillColor: Colors.white10,
+                                        labelText: 'Password',
+                                        labelStyle: TextStyle(
+                                            color: buttoncolor, fontSize: 13),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          borderSide: BorderSide(
+                                              width: 2, color: buttoncolor),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                        ),
+                                      ),
+                                      onSaved: (value) => pass = value,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                        }
+                                        if (value != psw) {
+                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: 30),
+                                    ElevatedButton(
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all<
+                                                    Color>(buttoncolor)),
+                                        onPressed: () {
+                                          if (_formKey.currentState
+                                              .validate()) {
+                                            _formKey.currentState.save();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ActiveAccount()),
+                                            );
+                                          }
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 30, right: 30),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 13.0, bottom: 13),
+                                            child: Text(
+                                              '   vers mon compte   ',
+                                            ),
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => ActiveAccount()),
+                // );
               },
               child: Card(
                 child: Column(
@@ -152,113 +419,6 @@ class Home extends StatelessWidget {
           ],
         ),
       ),
-      // body: Column(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   crossAxisAlignment: CrossAxisAlignment.stretch,
-      //   children: [
-      //     Container(
-      //       margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
-      //       child: OutlineButton(
-      //         splashColor: Color(0xFFa7a7a7),
-      //         highlightedBorderColor: buttoncolor,
-      //         padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-      //         child: Text(
-      //           "Produits",
-      //           style: TextStyle(fontSize: 28, color: buttoncolor),
-      //         ),
-      //         borderSide: BorderSide(
-      //           color: buttoncolor,
-      //         ),
-      //         onPressed: () {
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(builder: (context) => productList()),
-      //           );
-      //         },
-      //       ),
-      //     ),
-      //     SizedBox(
-      //       height: 20,
-      //     ),
-      //     Container(
-      //       margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
-      //       child: OutlineButton(
-      //         splashColor: Color(0xFFa7a7a7),
-      //         highlightedBorderColor: buttoncolor,
-      //         padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-      //         child: Text(
-      //           "Commandes",
-      //           style: TextStyle(
-      //             fontSize: 28,
-      //             color: buttoncolor,
-      //           ),
-      //         ),
-      //         borderSide: BorderSide(
-      //           color: buttoncolor,
-      //         ),
-      //         onPressed: () {
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(builder: (context) => CounterMenu()),
-      //           );
-      //         },
-      //       ),
-      //     ),
-      //     SizedBox(
-      //       height: 20,
-      //     ),
-      //     Container(
-      //       margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
-      //       child: OutlineButton(
-      //           splashColor: Color(0xFFa7a7a7),
-      //           highlightedBorderColor: buttoncolor,
-      //           padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
-      //           child: Text(
-      //             "Statistiques",
-      //             style: TextStyle(
-      //               fontSize: 28,
-      //               color: buttoncolor,
-      //             ),
-      //           ),
-      //           borderSide: BorderSide(
-      //             color: buttoncolor,
-      //           ),
-      //           onPressed: () {
-      //             Navigator.push(
-      //               context,
-      //               MaterialPageRoute(builder: (context) => UserConfirmation()),
-      //             );
-      //           }),
-      //     ),
-      //     SizedBox(
-      //       height: 20,
-      //     ),
-      //     Container(
-      //       margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
-      //       child: OutlineButton(
-      //         splashColor: Color(0xFFa7a7a7),
-      //         highlightedBorderColor: buttoncolor,
-      //         padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
-      //         child: Text(
-      //           "Abonnement",
-      //           style: TextStyle(
-      //             fontSize: 28,
-      //             color: buttoncolor,
-      //           ),
-      //         ),
-      //         borderSide: BorderSide(
-      //           color: buttoncolor,
-      //         ),
-      //         onPressed: () {
-      //           Navigator.push(
-      //             context,
-      //             MaterialPageRoute(builder: (context) => ActiveAccount()),
-      //           );
-      //         },
-      //       ),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

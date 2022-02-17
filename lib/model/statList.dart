@@ -10,6 +10,8 @@ class NewList {
   final int gain;
   @HiveField(2)
   final String dateNow;
+  @HiveField(3)
+  final Map<String, int> histPro;
 
-  NewList(this.recette, this.gain, this.dateNow );
+  NewList(this.recette, this.gain, this.dateNow, this.histPro);
 }

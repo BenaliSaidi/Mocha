@@ -37,19 +37,19 @@ int calculateUnitPrice() {
 }
 
 RetrieveUnit() {
-  var Bigmap = Map();
+  var bigmap = Map();
   unites.clear();
-  var TotalproductList = Hive.box('Paidproduct').values.toList();
-  TotalproductList.forEach((i) => unites.add(i.name));
+  var totalproductList = Hive.box('Paidproduct').values.toList();
+  totalproductList.forEach((i) => unites.add(i.name));
   unites.forEach((element) {
-    if (!Bigmap.containsKey(element)) {
-      Bigmap[element] = 1;
+    if (!bigmap.containsKey(element)) {
+      bigmap[element] = 1;
     } else {
-      Bigmap[element] += 1;
+      bigmap[element] += 1;
     }
   });
   //print(map);
-  Bigmap.forEach((k, v) {
+  bigmap.forEach((k, v) {
     final listeTotalUnit = TotalUnit(k, v);
     addNewUnit(listeTotalUnit);
   });
@@ -73,14 +73,14 @@ class _UnitProductState extends State<UnitProduct> {
           style: TextStyle(fontSize: 30, color: backgroundcolor),
         ),
         centerTitle: true,
-        backgroundColor: Colors.teal[500],
+        backgroundColor: Color(0xFF455A64),
       ),
       body: Container(
         child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
           Container(
             height: 50,
             child: ListTile(
-              tileColor: Colors.teal[200],
+              tileColor: Color(0xFF648391),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -114,7 +114,7 @@ class _UnitProductState extends State<UnitProduct> {
             minWidth: double.infinity,
             height: 50,
             child: RaisedButton(
-              color: Colors.teal[300],
+              color: Color(0xFF455A64),
               child: Text(
                 'Actualiser',
                 style: TextStyle(fontSize: 25, color: Colors.black),
@@ -125,14 +125,14 @@ class _UnitProductState extends State<UnitProduct> {
                     Toast.show("Ajoutez d'abord un prosuit SVP", context,
                         duration: 2,
                         gravity: Toast.CENTER,
-                        textColor: Color(0xFF66FCF1));
+                        textColor: Colors.white);
                   } else {
                     RetrieveUnit();
                     Toast.show(
                         calculateUnitPrice().toString() + ' DA ', context,
                         duration: 1,
                         gravity: Toast.BOTTOM,
-                        textColor: Color(0xFF66FCF1));
+                        textColor: Colors.white);
                   }
                 });
               },

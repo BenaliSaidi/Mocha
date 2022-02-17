@@ -5,12 +5,12 @@ part 'TotalUnitProduct.g.dart';
 @HiveType(typeId: 8)
 class TotalUnit {
   @HiveField(0)
-  final String product ;
+  final String product;
 
   @HiveField(1)
-  final int unite ;
+  final int unite;
 
-  TotalUnit(this.product , this.unite);
+  TotalUnit(this.product, this.unite);
 
  @override
   String toString() {

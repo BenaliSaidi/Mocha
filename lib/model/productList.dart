@@ -12,6 +12,9 @@ class NewProduct {
   final int sellingPrice;
   @HiveField(3)
   final int benefit;
+  @HiveField(4)
+  final String categorie;
 
-  NewProduct(this.name, this.buyingPrice, this.sellingPrice, this.benefit);
+  NewProduct(this.name, this.buyingPrice, this.sellingPrice, this.benefit,
+      this.categorie);
 }

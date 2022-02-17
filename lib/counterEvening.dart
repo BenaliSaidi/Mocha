@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-
+import 'package:mocha/model/histTable.dart';
 import 'package:mocha/model/unitproduct.dart';
 import 'package:toast/toast.dart';
 import 'package:vibration/vibration.dart';
@@ -10,8 +10,6 @@ import 'model/order.dart';
 import 'model/paidproduct.dart';
 
 Size displaySize(BuildContext context) {
-  print('Size = ' + MediaQuery.of(context).size.toString());
-  print(MediaQuery.of(context).size.toString());
   return MediaQuery.of(context).size;
 }
 
@@ -26,12 +24,26 @@ List<int> productbenefits = [];
 List<int> productindex = [];
 List<int> benefit = [];
 List<int> productkey = [];
-
 List<String> unite = [];
 List<dynamic> filtre = [];
 
+List<String> productsnameList = [];
+List<int> productsellingpriceList = [];
+
+List<int> productkeyList = [];
+List<dynamic> filtreList = [];
+
+List<int> productbenefitsList = [];
+List<int> productindexList = [];
+List<int> benefitList = [];
+List<int> productbuyingpriceList = [];
+
+List<dynamic> allkeysList = [];
+List<dynamic> allList = [];
+
 Color backgroundcolor = Color(0xFFececec);
-Color appbarcolor = Color(0xFF0a0a0a);
+Color appbarcolor = Color(0xFF455A64);
+//#455A64
 Color buttoncolor = Color(0xFF0a0a0a);
 int row;
 double font;
@@ -41,7 +53,7 @@ var newFormat = DateFormat("yyyy-MM-dd");
 void addNewOrder(NewOrder order) {
   final ordersBox = Hive.box('order');
   var lengthBox = Hive.box('order').values;
-  if (Hive.box('order').values.isEmpty) {
+  if (lengthBox.isEmpty) {
     ordersBox.put(1, order);
     print('the box is empty');
   } else {
@@ -55,9 +67,15 @@ void addNewOrder(NewOrder order) {
 
 void addToPaidProduct(PaidProduct paidProduct) {
   // ignore: non_constant_identifier_names
-  Hive.openBox('Paidproduct');
+
   final PpBox = Hive.box('Paidproduct');
   PpBox.add(paidProduct);
+}
+
+void addToHistory(HistTable historytable) {
+  // ignore: non_constant_identifier_names
+
+  Hive.box('history').add(historytable);
 }
 
 void addNewUnit(Unit unit) {
@@ -73,6 +91,13 @@ clearOldTotalUNit() {
   Hive.box('TotalunitEvening').clear();
 }
 
+clear() {
+  Hive.box('order').clear();
+  print('deleeeeete');
+}
+
+generateList(int nbrList) {}
+
 class CounterEvening extends StatefulWidget {
   String value;
   CounterEvening({this.value});
@@ -84,6 +109,8 @@ class CounterEvening extends StatefulWidget {
 class _CounterEveningState extends State<CounterEvening> {
   String value;
   _CounterEveningState({this.value});
+
+  int lenghtList;
 
   int GridViewlayout() {
     if (displaySize(context).width < 400) {
@@ -179,7 +206,7 @@ class _CounterEveningState extends State<CounterEvening> {
               style: TextStyle(fontSize: 30, color: Colors.white),
             ),
             centerTitle: true,
-            backgroundColor: Colors.teal,
+            backgroundColor: Color(0xFF455A64),
             bottom: TabBar(
               indicatorColor: Colors.white,
               tabs: [
@@ -211,7 +238,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                 child: Text('Article',
                                     style: TextStyle(
                                         fontSize: fontsize(),
-                                        color: Colors.teal,
+                                        color: Color(0xFF455A64),
                                         fontWeight: FontWeight.bold)),
                               ),
                               Container(
@@ -221,7 +248,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                   'Prix',
                                   style: TextStyle(
                                       fontSize: fontsize(),
-                                      color: Colors.teal,
+                                      color: Color(0xFF455A64),
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -247,7 +274,7 @@ class _CounterEveningState extends State<CounterEvening> {
                       ),
                       Expanded(child: _buildListView()),
                       Container(
-                          color: Colors.teal,
+                          color: Color(0xFF455A64),
                           height: 50,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -258,7 +285,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                       ' DA',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold)),
                               SizedBox(
                                 width: 50,
@@ -270,13 +297,15 @@ class _CounterEveningState extends State<CounterEvening> {
                                   "Clôturer",
                                   style: TextStyle(
                                     fontSize: 16,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 ),
                                 borderSide: BorderSide(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                                 onPressed: () {
+                                  Map<int, String> nameVal = {};
+                                  Map<int, String> pariceVal = {};
                                   final item = Hive.box('order')
                                       .values
                                       .where((order) => order.tables == value)
@@ -287,26 +316,38 @@ class _CounterEveningState extends State<CounterEvening> {
                                         context,
                                         duration: 1,
                                         gravity: Toast.CENTER,
-                                        textColor: Color(0xFF66FCF1));
+                                        textColor: Colors.white);
                                   } else {
                                     item.forEach((element) {
+                                      int id = item.indexOf(element);
                                       String name = element.name;
                                       int slgPrice = element.sellingPrice;
                                       int benefit = element.benefit;
 
+                                      nameVal[id] = name;
+                                      pariceVal[id] = slgPrice.toString();
+
+                                      print(id);
+
                                       final paidproduct =
                                           PaidProduct(name, slgPrice, benefit);
                                       addToPaidProduct(paidproduct);
-
-                                      var a =
-                                          Hive.box('Paidproduct').values.length;
-                                      print('a = $a');
                                     });
+                                    var totalPrice = calculatePrice();
+                                    final DateTime now = DateTime.now();
+                                    final DateFormat formatter =
+                                        DateFormat('HH:mm:ss');
+                                    final String formatted =
+                                        formatter.format(now);
+
+                                    final historyproduct = HistTable(totalPrice,
+                                        value, formatted, pariceVal, nameVal);
+                                    addToHistory(historyproduct);
 
                                     listToDelete.clear();
                                     item.forEach(
                                         (item) => listToDelete.add(item.key));
-                                    print('list to delete is $listToDelete');
+
                                     listToDelete.forEach((element) {
                                       Hive.box('order').delete(element);
                                     });
@@ -315,11 +356,12 @@ class _CounterEveningState extends State<CounterEvening> {
                                       calculatePrice();
                                     });
                                     Toast.show(
-                                        "Bravo vous avez clôturé la journée",
-                                        context,
-                                        duration: 1,
-                                        gravity: Toast.CENTER,
-                                        textColor: Color(0xFF66FCF1));
+                                      "Table payée !! ",
+                                      context,
+                                      duration: 1,
+                                      gravity: Toast.CENTER,
+                                      textColor: Colors.white,
+                                    );
                                     clearOldTotalUNit();
                                   }
                                 },
@@ -330,75 +372,130 @@ class _CounterEveningState extends State<CounterEvening> {
                   ),
                 ),
                 Container(
-                  child: GridView.count(
-                    padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
-                    mainAxisSpacing: 3.0,
-                    crossAxisSpacing: 3.0,
-                    scrollDirection: Axis.vertical,
-                    crossAxisCount: GridViewlayout(),
-                    children:
-                        List.generate(Hive.box('product').length, (index) {
-                      final products = Hive.box('product').getAt(index);
+                  child: ListView.builder(
+                    itemCount: Hive.box('categorie').length,
+                    itemBuilder: (context, index) {
+                      final cat = Hive.box('categorie').getAt(index);
+                      final filtreList = Hive.box('product')
+                          .values
+                          .where((element) =>
+                              element.categorie == cat.categorie.toString())
+                          .toList();
 
-                      return RaisedButton(
-                        splashColor: Color(0xFF45A29E),
-                        color: Color(0xFF15171e),
-                        padding: EdgeInsets.zero,
-                        onPressed: () {
-                          var key = Hive.box('order').values;
-                          if (Hive.box('order').values.isEmpty) {
-                            final neworder = NewOrder(
-                                products.name,
-                                products.buyingPrice,
-                                products.sellingPrice,
-                                products.benefit,
-                                value,
-                                1);
+                      allList.add(filtreList);
 
-                            addNewOrder(neworder);
-                            print(products.name + '    ' + value);
+                      return Container(
+                        child: Column(
+                          children: [
+                            Container(
+                                margin: EdgeInsets.only(bottom: 5),
+                                height: 60,
+                                width: double.maxFinite,
+                                color: Color(0xFF15171e),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10.0, top: 15, bottom: 15),
+                                  child: Center(
+                                    child: Text(
+                                      cat.categorie.toString().toUpperCase(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 25,
+                                          color: Colors.grey[300]),
+                                    ),
+                                  ),
+                                )),
+                            Container(
+                              child: GridView.count(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.fromLTRB(2, 2, 2, 5),
+                                mainAxisSpacing: 3.0,
+                                crossAxisSpacing: 3.0,
+                                scrollDirection: Axis.vertical,
+                                crossAxisCount: GridViewlayout(),
+                                children: List.generate(
+                                    Hive.box('product')
+                                        .values
+                                        .where((element) =>
+                                            element.categorie == cat.categorie)
+                                        .length, (indexone) {
+                                  return Container(
+                                    child: RaisedButton(
+                                      splashColor: Color(0xFF45A29E),
+                                      color: Colors.grey[800],
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        var key = Hive.box('order').values;
+                                        if (key.isEmpty) {
+                                          print('fiiiiiiiiirst');
+                                          final neworder = NewOrder(
+                                              allList[index][indexone].name,
+                                              allList[index][indexone]
+                                                  .buyingPrice,
+                                              allList[index][indexone]
+                                                  .sellingPrice,
+                                              allList[index][indexone].benefit,
+                                              value,
+                                              1);
 
-                            setState(() {
-                              calculatePrice();
-                            });
-                            Vibration.vibrate(duration: 100);
+                                          addNewOrder(neworder);
 
-                            clearOldUNit();
-                          } else {
-                            key.forEach((item) => allkeys.add(item.key));
-                            int lastkeyElement = allkeys.last;
-                            int newkeyElement = lastkeyElement + 1;
-                            final neworder = NewOrder(
-                                products.name,
-                                products.buyingPrice,
-                                products.sellingPrice,
-                                products.benefit,
-                                value,
-                                newkeyElement);
+                                          setState(() {
+                                            calculatePrice();
+                                          });
+                                          Vibration.vibrate(duration: 100);
 
-                            addNewOrder(neworder);
-                            print(products.name + '    ' + value);
+                                          clearOldUNit();
+                                        } else {
+                                          key.forEach((item) =>
+                                              allkeysList.add(item.key));
+                                          int lastkeyElement = allkeysList.last;
+                                          int newkeyElement =
+                                              lastkeyElement + 1;
 
-                            setState(() {
-                              calculatePrice();
-                            });
-                            Vibration.vibrate(duration: 100);
+                                          final neworder = NewOrder(
+                                              allList[index][indexone].name,
+                                              allList[index][indexone]
+                                                  .buyingPrice,
+                                              allList[index][indexone]
+                                                  .sellingPrice,
+                                              allList[index][indexone].benefit,
+                                              value,
+                                              newkeyElement);
 
-                            clearOldUNit();
-                          }
-                        },
-                        child: Text(
-                          products.name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Recursive',
-                            fontSize: fontsize(),
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
+                                          addNewOrder(neworder);
+
+                                          setState(() {
+                                            calculatePrice();
+                                          });
+                                          Vibration.vibrate(duration: 100);
+
+                                          clearOldUNit();
+                                        }
+                                        lenghtList = filtreList.length;
+                                      },
+                                      child: Text(
+                                        '${allList[index][indexone].name}'
+                                            .toString()
+                                            .toUpperCase(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Recursive',
+                                          fontSize: fontsize(),
+                                          color: Colors.white,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            ),
+                          ],
                         ),
                       );
-                    }),
+                    },
                   ),
                 ),
                 Container(
@@ -418,17 +515,17 @@ class _CounterEveningState extends State<CounterEvening> {
                                   child: Text('Article',
                                       style: TextStyle(
                                           fontSize: fontsize(),
-                                          color: Color(0xFF45A29E),
+                                          color: Color(0xFF455A64),
                                           fontWeight: FontWeight.bold)),
                                 ),
                                 Container(
                                   alignment: Alignment.centerRight,
-                                  width: 60,
+                                  width: 100,
                                   child: Text(
                                     'Unités',
                                     style: TextStyle(
                                         fontSize: fontsize(),
-                                        color: Color(0xFF45A29E),
+                                        color: Color(0xFF455A64),
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -446,7 +543,7 @@ class _CounterEveningState extends State<CounterEvening> {
                             child: Text(
                               'Actualisez',
                               style: TextStyle(
-                                  fontSize: 25, color: Color(0xFF45A29E)),
+                                  fontSize: 25, color: Colors.white70),
                             ),
                             onPressed: () {
                               setState(() {
@@ -485,7 +582,7 @@ class _CounterEveningState extends State<CounterEvening> {
                 .values
                 .where((order) => order.tables == value)
                 .toList();
-            //***** */
+
             productname.clear();
             productsellingprice.clear();
             productbenefits.clear();
@@ -503,13 +600,6 @@ class _CounterEveningState extends State<CounterEvening> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Container(
-                      //   alignment: Alignment.center,
-                      //   width: 30,
-                      //   child: Text('${productkey[index]}'.toString(),
-                      //       style: TextStyle(fontSize: 15, color: Colors.black,),
-                      //       textAlign: TextAlign.center),
-                      // ),
                       Container(
                         alignment: Alignment.center,
                         width: 90,
@@ -539,7 +629,7 @@ class _CounterEveningState extends State<CounterEvening> {
                         child: IconButton(
                           icon: Icon(
                             Icons.attach_money_rounded,
-                            color: Color(0xFF45A29E),
+                            color: Color(0xFF455A64),
                           ),
                           onPressed: () {
                             var name =
@@ -553,6 +643,19 @@ class _CounterEveningState extends State<CounterEvening> {
                             print('nom $name');
                             print('nom $sp');
                             print('nom $bp');
+                            DateTime now = DateTime.now();
+                            DateFormat formatter = DateFormat('HH:mm:ss');
+                            String formatted = formatter.format(now);
+
+                            Map<int, String> selPrice = {};
+                            Map<int, String> selname = {};
+
+                            selPrice[0] = sp.toString();
+                            selname[0] = name;
+
+                            var historyproduct = HistTable(
+                                sp, value, formatted, selPrice, selname);
+                            addToHistory(historyproduct);
                             Hive.box('order').delete(productkey[index]);
                             final paidproduct = PaidProduct(name, sp, bp);
                             addToPaidProduct(paidproduct);
@@ -576,7 +679,7 @@ class _CounterEveningState extends State<CounterEvening> {
                           onPressed: () {
                             print(productkey[index]);
                             Hive.box('order').delete(productkey[index]);
-                            // productname.removeAt(index);
+
                             Toast.show("Produit supprimé avec succès", context,
                                 duration: 1,
                                 gravity: Toast.BOTTOM,
@@ -639,7 +742,6 @@ class _CounterEveningState extends State<CounterEvening> {
                     color: Color(0xFF15171e)),
               ],
             );
-            // Container(height: 5,color: Colors.red),
           },
         );
       },

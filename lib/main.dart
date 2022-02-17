@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:mocha/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive/hive.dart';
+import 'package:mocha/model/addCategorie.dart';
+import 'package:mocha/model/histTable.dart';
 import 'package:mocha/model/productList.dart';
+import 'package:mocha/model/pwd.dart';
 import 'package:mocha/model/statList.dart';
 import 'package:mocha/ActiveAccount.dart';
 import 'package:mocha/TablesEvening.dart';
@@ -16,13 +20,8 @@ import 'model/order.dart';
 import 'model/paidproduct.dart';
 import 'model/tableList.dart';
 
-//void main() => runApp(MaterialApp(home: Tables()));
-
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final appDocumentDirectory =
-      await path_provider.getApplicationDocumentsDirectory();
-  Hive.init(appDocumentDirectory.path);
+  Hive.registerAdapter(HistTableAdapter());
   Hive.registerAdapter(NewListAdapter());
   Hive.registerAdapter(NewProductAdapter());
   Hive.registerAdapter(UnitAdapter());
@@ -32,6 +31,13 @@ void main() async {
   Hive.registerAdapter(TableslistAdapter());
   Hive.registerAdapter(NewOrderAdapter());
   Hive.registerAdapter(PaidProductAdapter());
+  Hive.registerAdapter(CategorieAdapter());
+  Hive.registerAdapter(PassWordAdapter());
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
 
   await Hive.openBox('Paidproduct');
   await Hive.openBox('product');
@@ -47,6 +53,9 @@ void main() async {
   await Hive.openBox('TotalunitMorning');
   await Hive.openBox('TotalunitEvening');
   await Hive.openBox('order');
+  await Hive.openBox('categorie');
+  await Hive.openBox('history');
+  await Hive.openBox('password');
 
   var time = DateTime.now();
   // ignore: non_constant_identifier_names

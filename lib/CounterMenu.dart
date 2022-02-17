@@ -17,7 +17,7 @@ class CounterMenu extends StatelessWidget {
           style: TextStyle(fontSize: 30, color: backgroundcolor),
         ),
         centerTitle: true,
-        backgroundColor: appbarcolor,
+        backgroundColor: Color(0xFF455A64),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -26,15 +26,15 @@ class CounterMenu extends StatelessWidget {
           Container(
             margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton.icon(
-              splashColor: Color(0xFF45A29E),
-              highlightedBorderColor: buttoncolor,
+              splashColor: Color(0xFF455A64),
+              highlightedBorderColor: Color(0xFF455A64),
               padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
               label: Text(
                 " Matin",
                 style: TextStyle(fontSize: 28, color: buttoncolor),
               ),
               borderSide: BorderSide(
-                color: buttoncolor,
+                color: Color(0xFF455A64),
               ),
               icon: Icon(Icons.wb_sunny, color: buttoncolor),
               onPressed: () {
@@ -51,7 +51,7 @@ class CounterMenu extends StatelessWidget {
           Container(
             margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
             child: OutlineButton.icon(
-              splashColor: Color(0xFF45A29E),
+              splashColor: Color(0xFF455A64),
               highlightedBorderColor: buttoncolor,
               padding: EdgeInsets.fromLTRB(50, 20, 50, 20),
               label: Text(
@@ -59,7 +59,7 @@ class CounterMenu extends StatelessWidget {
                 style: TextStyle(fontSize: 28, color: buttoncolor),
               ),
               borderSide: BorderSide(
-                color: buttoncolor,
+                color: Color(0xFF455A64),
               ),
               onPressed: () {
                 Navigator.push(

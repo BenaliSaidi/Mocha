@@ -3,12 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:mocha/model/addCategorie.dart';
 import 'package:mocha/model/productList.dart';
 import 'package:toast/toast.dart';
 
 Color backgroundcolor = Color(0xFFececec);
 Color appbarcolor = Color(0xFF0a0a0a);
 Color buttoncolor = Color(0xFF0a0a0a);
+var testou;
+
+final List<String> categorieList = [];
+
+List<String> RetList() {
+  categorieList.clear();
+  List categorieListObj = Hive.box('categorie').values.toList();
+  categorieListObj.forEach((element) {
+    categorieList.add(element.categorie);
+  });
+
+  return categorieList;
+}
 
 class AddProduct extends StatefulWidget {
   @override
@@ -20,6 +34,9 @@ class _AddProductState extends State<AddProduct> {
   String _name;
   String _buyingPrice;
   String _sellingPrice;
+
+  String valueChoose;
+  final items = Hive.box('categorie').values.toList();
 
   void addNewProduct(NewProduct product) {
     final productsBox = Hive.box('product');
@@ -36,7 +53,7 @@ class _AddProductState extends State<AddProduct> {
           style: TextStyle(fontSize: 30, color: backgroundcolor),
         ),
         centerTitle: true,
-        backgroundColor: Color(0xFF0B0C10),
+        backgroundColor: Color(0xFF455A64),
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(40.0, 60.0, 40.0, 00.0),
@@ -132,6 +149,27 @@ class _AddProductState extends State<AddProduct> {
                     onSaved: (value) => _sellingPrice = value,
                   ),
                   SizedBox(height: 20),
+                  Container(
+                    padding: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[600]),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: DropdownButton(
+                      value: valueChoose,
+                      isExpanded: true,
+                      items: RetList().map((e) {
+                        return DropdownMenuItem(
+                          value: e,
+                          child: Text(e),
+                        );
+                      }).toList(),
+                      onChanged: (value) => setState(() {
+                        this.valueChoose = value;
+                      }),
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   RaisedButton(
                     color: buttoncolor,
                     padding: EdgeInsets.fromLTRB(10, 15, 10, 15),
@@ -145,7 +183,8 @@ class _AddProductState extends State<AddProduct> {
                             _name,
                             int.parse(_buyingPrice),
                             int.parse(_sellingPrice),
-                            _benefit);
+                            _benefit,
+                            valueChoose);
                         addNewProduct(newproduct);
                         _formKey.currentState.reset();
                         Toast.show("Produit sauvegardé avec succès", context,

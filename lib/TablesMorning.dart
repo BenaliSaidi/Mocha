@@ -4,9 +4,10 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
+import 'package:mocha/model/TotalUnitProduct.dart';
 import 'package:mocha/model/tableList.dart';
+import 'package:mocha/paidTable.dart';
 import 'package:toast/toast.dart';
-
 import 'UnitProduct.dart';
 import 'counterMorning.dart';
 import 'model/statList.dart';
@@ -21,7 +22,8 @@ List<int> totalbenefits = [];
 Color backgroundcolor = Color(0xFFececec);
 Color appbarcolor = Color(0xFF0a0a0a);
 Color buttoncolor = Color(0xFF0a0a0a);
-Color colorTable = Colors.teal;
+Color colorTable;
+var size = 0;
 
 // ignore: non_constant_identifier_names
 
@@ -31,24 +33,11 @@ void addNewMorningStat(NewList stat) {
   statBox.add(stat);
 }
 
-Color tableColor(tableNum) {
-  var size = Hive.box('order')
-      .values
-      .where((order) => order.tables == tableNum)
-      .toList()
-      .length;
-  if (size == 0) {
-    colorTable = Colors.teal[300];
-  } else {
-    colorTable = Colors.red[400];
-  }
-  return colorTable;
-}
-
 timeNow() {
   return newFormat.format(DateTime.now());
 }
 
+int sumTP;
 calculateTotalPrice() {
   final totalpricesList = Hive.box('Paidproduct').values.toList();
 
@@ -58,7 +47,7 @@ calculateTotalPrice() {
   }
   totalpricesList.forEach((item) => totalprices.add(item.sellingPrice));
   //print(prices);
-  int sumTP = totalprices.reduce((a, b) => a + b);
+  sumTP = totalprices.reduce((a, b) => a + b);
   print('sum pf slg $sumTP');
   return sumTP;
 }
@@ -76,7 +65,17 @@ calculateTotalBenefit() {
   return sumTB;
 }
 
-//void main() => runApp(MaterialApp(home: TablesMorning()));
+String pass;
+String psw;
+
+String mdp() {
+  if (Hive.box('password').isNotEmpty) {
+    psw = Hive.box('password').getAt(0).pwd;
+  } else {
+    psw = 'admin';
+  }
+  return psw;
+}
 
 class TablesMorning extends StatefulWidget {
   @override
@@ -86,6 +85,20 @@ class TablesMorning extends StatefulWidget {
 class _TablesMorningState extends State<TablesMorning> {
   final _formKey = GlobalKey<FormState>();
   String name;
+
+  Color tableColor(tableNum) {
+    var size = Hive.box('order')
+        .values
+        .where((order) => order.tables == tableNum)
+        .toList()
+        .length;
+    if (size == 0) {
+      colorTable = Color(0xFF607D8B);
+    } else {
+      colorTable = Colors.red[400];
+    }
+    return colorTable;
+  }
 
   int gridViewlayout() {
     if (displaySize(context).width < 400) {
@@ -118,6 +131,7 @@ class _TablesMorningState extends State<TablesMorning> {
 
   @override
   Widget build(BuildContext context) {
+    mdp();
     return Scaffold(
       backgroundColor: backgroundcolor,
       appBar: AppBar(
@@ -126,43 +140,44 @@ class _TablesMorningState extends State<TablesMorning> {
           style: TextStyle(fontSize: 30, color: backgroundcolor),
         ),
         centerTitle: true,
-        backgroundColor: Colors.teal[500],
+        backgroundColor: Color(0xFF455A64),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
-              child: OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CounterMorning(value: '00'),
-                        ));
-                  },
-                  style: OutlinedButton.styleFrom(
-                    primary: Colors.black,
-                    backgroundColor: Colors.teal[300],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      'Comptoir',
-                      style: TextStyle(
-                        fontSize: fontsize(),
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Comfortaa',
-                      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 15, 30, 0),
+            child: OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CounterMorning(value: '00'),
+                      ));
+                },
+                style: OutlinedButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Color(0xFF455A64),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    'Comptoir',
+                    style: TextStyle(
+                      fontSize: fontsize(),
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Comfortaa',
                     ),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            ValueListenableBuilder(
+                  ),
+                )),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Expanded(
+            flex: 1,
+            child: ValueListenableBuilder(
                 valueListenable: Hive.box('order').listenable(),
                 builder: (context, box, widget) {
                   return Container(
@@ -184,12 +199,19 @@ class _TablesMorningState extends State<TablesMorning> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       content: Container(
-                                        height: 200,
+                                        height: 150,
                                         child: Column(
                                           children: [
-                                            Text(
-                                                'Voulez vous vraiment supprimer cette table'),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 20, top: 20),
+                                              child: Text(
+                                                  'Voulez vous vraiment supprimer cette table ?'),
+                                            ),
                                             OutlinedButton(
+                                                style: OutlinedButton.styleFrom(
+                                                  backgroundColor: Colors.black,
+                                                ),
                                                 onPressed: () {
                                                   Hive.box('table')
                                                       .deleteAt(index);
@@ -203,7 +225,11 @@ class _TablesMorningState extends State<TablesMorning> {
                                                   Navigator.pop(context);
                                                   setState(() {});
                                                 },
-                                                child: Text('OUI'))
+                                                child: Text(
+                                                  'OUI',
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ))
                                           ],
                                         ),
                                       ),
@@ -225,7 +251,7 @@ class _TablesMorningState extends State<TablesMorning> {
                               table.name,
                               style: TextStyle(
                                 fontSize: fontsize(),
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Comfortaa',
                               ),
@@ -235,75 +261,262 @@ class _TablesMorningState extends State<TablesMorning> {
                         }),
                       ));
                 }),
-            Padding(
-                padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                child: Row(
-                  children: [
-                    OutlinedButton(
-                        onPressed: () {
-                          if (Hive.box('Paidproduct').isEmpty) {
-                            print('veuillez d\'abord clôturer les tables SVP ');
-                            if (Hive.box('order').isNotEmpty) {
-                              print(
-                                  'veuillez d\'abord clôturer les tables SVP ');
-                            }
-                            Toast.show("veuillez d\'abord clôturer les tables ",
-                                context,
-                                duration: 1,
-                                gravity: Toast.CENTER,
-                                textColor: Color(0xFF66FCF1));
-                          } else {
-                            final recette = NewList(calculateTotalPrice(),
-                                calculateTotalBenefit(), timeNow());
+          ),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(30, 10, 30, 30),
+              child: Row(
+                children: [
+                  OutlinedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Container(
+                                  height: 150,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            bottom: 20, top: 20),
+                                        child: Text(
+                                            'Voulez vous vraiment clôturer la journée ?'),
+                                      ),
+                                      OutlinedButton(
+                                          style: OutlinedButton.styleFrom(
+                                            backgroundColor: Colors.black,
+                                          ),
+                                          onPressed: () {
+                                            if (Hive.box('Paidproduct')
+                                                .isEmpty) {
+                                              print(
+                                                  'veuillez d\'abord clôturer les tables SVP ');
+                                              if (Hive.box('order')
+                                                  .isNotEmpty) {
+                                                print(
+                                                    'veuillez d\'abord clôturer les tables SVP ');
+                                              }
+                                              Toast.show(
+                                                  "veuillez d\'abord clôturer les tables ",
+                                                  context,
+                                                  duration: 1,
+                                                  gravity: Toast.CENTER,
+                                                  textColor: Color(0xFF66FCF1));
+                                            } else {
+                                              void addNewUnit(
+                                                  TotalUnit totalunit) {
+                                                final statBox = Hive.box(
+                                                    'TotalunitMorning');
+                                                statBox.add(totalunit);
+                                              }
 
-                            addNewMorningStat(recette);
-                            Hive.box('order').clear();
-                            Hive.box('Paidproduct').clear();
-                            Toast.show(
-                                "Bravo vous avez clôturé la journée", context,
-                                duration: 1,
-                                gravity: Toast.CENTER,
-                                textColor: Color(0xFF66FCF1));
-                          }
-                        },
-                        style: OutlinedButton.styleFrom(
-                          primary: Colors.black,
-                          backgroundColor: Colors.black,
+                                              Map<String, int> bigmap = {};
+                                              RetrieveUnit() {
+                                                unites.clear();
+                                                var totalproductList =
+                                                    Hive.box('Paidproduct')
+                                                        .values
+                                                        .toList();
+                                                totalproductList.forEach(
+                                                    (i) => unites.add(i.name));
+                                                unites.forEach((element) {
+                                                  if (!bigmap
+                                                      .containsKey(element)) {
+                                                    bigmap[element] = 1;
+                                                  } else {
+                                                    bigmap[element] += 1;
+                                                  }
+                                                });
+
+                                                bigmap.forEach((k, v) {
+                                                  final listeTotalUnit =
+                                                      TotalUnit(k, v);
+                                                  addNewUnit(listeTotalUnit);
+                                                });
+                                              }
+
+                                              RetrieveUnit();
+                                              print(bigmap);
+
+                                              final recette = NewList(
+                                                  calculateTotalPrice(),
+                                                  calculateTotalBenefit(),
+                                                  timeNow(),
+                                                  bigmap);
+
+                                              addNewMorningStat(recette);
+                                              // Hive.box('order').clear();
+                                              Hive.box('Paidproduct').clear();
+                                              Hive.box('history').clear();
+
+                                              Toast.show(
+                                                  "Bravo vous avez clôturé la journée",
+                                                  context,
+                                                  duration: 1,
+                                                  gravity: Toast.BOTTOM,
+                                                  textColor: Colors.white);
+                                            }
+                                          },
+                                          child: Text(
+                                            'OUI',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ))
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Color(0xFF455A64),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                        child: Text(
+                          'Clôturer la journée',
+                          style: TextStyle(
+                              fontSize: fontsize(), color: Colors.white),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-                          child: Text(
-                            'Clôturer la journée',
-                            style: TextStyle(
-                                fontSize: fontsize(), color: Colors.white),
-                          ),
-                        )),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    OutlinedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => UnitProduct()),
-                          );
-                        },
-                        style: OutlinedButton.styleFrom(
-                          primary: Colors.white,
-                          backgroundColor: Colors.black,
+                      )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TablePaid()),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Color(0xFF455A64),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
+                        child: Text(
+                          'Table Clôturée',
+                          style: TextStyle(
+                              fontSize: fontsize(), color: Colors.white),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 13, 0, 13),
-                          child: Icon(Icons.list),
-                        )),
-                  ],
-                )),
-          ],
-        ),
+                      )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Container(
+                                  height: 200,
+                                  width: 200,
+                                  padding: EdgeInsets.only(top: 30),
+                                  child: Column(
+                                    children: [
+                                      Form(
+                                        key: _formKey,
+                                        child: Column(
+                                          children: [
+                                            TextFormField(
+                                              obscureText: true,
+                                              keyboardType: TextInputType.text,
+                                              style: TextStyle(
+                                                //fontSize: 20,
+                                                color: buttoncolor,
+                                              ),
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                filled: true,
+                                                fillColor: Colors.white10,
+                                                labelText: 'Password',
+                                                labelStyle: TextStyle(
+                                                    color: buttoncolor,
+                                                    fontSize: 13),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: BorderSide(
+                                                      width: 2,
+                                                      color: buttoncolor),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                ),
+                                              ),
+                                              onSaved: (value) => pass = value,
+                                              validator: (value) {
+                                                if (value.isEmpty) {
+                                                  return 'SVP INSEREZ UN MDP VALIDE';
+                                                }
+                                                if (value != psw) {
+                                                  return 'SVP INSEREZ UN MDP VALIDE';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                            SizedBox(height: 30),
+                                            ElevatedButton(
+                                                style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all<Color>(
+                                                                buttoncolor)),
+                                                onPressed: () {
+                                                  if (_formKey.currentState
+                                                      .validate()) {
+                                                    _formKey.currentState
+                                                        .save();
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              UnitProduct()),
+                                                    );
+                                                  }
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 30, right: 30),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 13.0,
+                                                            bottom: 13),
+                                                    child: Text(
+                                                      '   vers statistiques   ',
+                                                    ),
+                                                  ),
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Color(0xFF455A64),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                        child: Icon(Icons.list),
+                      )),
+                ],
+              )),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: buttoncolor,
+          backgroundColor: Color(0xFF455A64),
           child: Text(
             '+',
             style: TextStyle(fontSize: 30),
