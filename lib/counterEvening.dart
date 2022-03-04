@@ -66,15 +66,11 @@ void addNewOrder(NewOrder order) {
 }
 
 void addToPaidProduct(PaidProduct paidProduct) {
-  // ignore: non_constant_identifier_names
-
   final PpBox = Hive.box('Paidproduct');
   PpBox.add(paidProduct);
 }
 
 void addToHistory(HistTable historytable) {
-  // ignore: non_constant_identifier_names
-
   Hive.box('history').add(historytable);
 }
 
@@ -96,10 +92,8 @@ clear() {
   print('deleeeeete');
 }
 
-generateList(int nbrList) {}
-
 class CounterEvening extends StatefulWidget {
-  String value;
+  final String value;
   CounterEvening({this.value});
 
   @override
@@ -191,12 +185,13 @@ class _CounterEveningState extends State<CounterEvening> {
     return sumB;
   }
 
-  final _formKey = GlobalKey<FormState>();
   String name;
 
   @override
   Widget build(BuildContext context) {
     clearOldUNit();
+    allList.clear();
+    filtreList.clear();
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -372,132 +367,136 @@ class _CounterEveningState extends State<CounterEvening> {
                   ),
                 ),
                 Container(
-                  child: ListView.builder(
-                    itemCount: Hive.box('categorie').length,
-                    itemBuilder: (context, index) {
-                      final cat = Hive.box('categorie').getAt(index);
-                      final filtreList = Hive.box('product')
-                          .values
-                          .where((element) =>
-                              element.categorie == cat.categorie.toString())
-                          .toList();
+                    child: ListView.builder(
+                        itemCount: Hive.box('categorie').length,
+                        itemBuilder: (context, index) {
+                          final cat = Hive.box('categorie').getAt(index);
+                          filtreList = Hive.box('product')
+                              .values
+                              .where((element) =>
+                                  element.categorie == cat.categorie.toString())
+                              .toList();
 
-                      allList.add(filtreList);
+                          allList.add(filtreList);
 
-                      return Container(
-                        child: Column(
-                          children: [
-                            Container(
-                                margin: EdgeInsets.only(bottom: 5),
-                                height: 60,
-                                width: double.maxFinite,
-                                color: Color(0xFF15171e),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0, top: 15, bottom: 15),
-                                  child: Center(
-                                    child: Text(
-                                      cat.categorie.toString().toUpperCase(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25,
-                                          color: Colors.grey[300]),
-                                    ),
-                                  ),
-                                )),
-                            Container(
-                              child: GridView.count(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(2, 2, 2, 5),
-                                mainAxisSpacing: 3.0,
-                                crossAxisSpacing: 3.0,
-                                scrollDirection: Axis.vertical,
-                                crossAxisCount: GridViewlayout(),
-                                children: List.generate(
-                                    Hive.box('product')
-                                        .values
-                                        .where((element) =>
-                                            element.categorie == cat.categorie)
-                                        .length, (indexone) {
-                                  return Container(
-                                    child: RaisedButton(
-                                      splashColor: Color(0xFF45A29E),
-                                      color: Colors.grey[800],
-                                      padding: EdgeInsets.zero,
-                                      onPressed: () {
-                                        var key = Hive.box('order').values;
-                                        if (key.isEmpty) {
-                                          print('fiiiiiiiiirst');
-                                          final neworder = NewOrder(
-                                              allList[index][indexone].name,
-                                              allList[index][indexone]
-                                                  .buyingPrice,
-                                              allList[index][indexone]
-                                                  .sellingPrice,
-                                              allList[index][indexone].benefit,
-                                              value,
-                                              1);
-
-                                          addNewOrder(neworder);
-
-                                          setState(() {
-                                            calculatePrice();
-                                          });
-                                          Vibration.vibrate(duration: 100);
-
-                                          clearOldUNit();
-                                        } else {
-                                          key.forEach((item) =>
-                                              allkeysList.add(item.key));
-                                          int lastkeyElement = allkeysList.last;
-                                          int newkeyElement =
-                                              lastkeyElement + 1;
-
-                                          final neworder = NewOrder(
-                                              allList[index][indexone].name,
-                                              allList[index][indexone]
-                                                  .buyingPrice,
-                                              allList[index][indexone]
-                                                  .sellingPrice,
-                                              allList[index][indexone].benefit,
-                                              value,
-                                              newkeyElement);
-
-                                          addNewOrder(neworder);
-
-                                          setState(() {
-                                            calculatePrice();
-                                          });
-                                          Vibration.vibrate(duration: 100);
-
-                                          clearOldUNit();
-                                        }
-                                        lenghtList = filtreList.length;
-                                      },
-                                      child: Text(
-                                        '${allList[index][indexone].name}'
-                                            .toString()
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Recursive',
-                                          fontSize: fontsize(),
-                                          color: Colors.white,
+                          return Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.only(bottom: 5),
+                                    height: 60,
+                                    width: double.maxFinite,
+                                    color: Color(0xFF15171e),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10.0, top: 15, bottom: 15),
+                                      child: Center(
+                                        child: Text(
+                                          cat.categorie
+                                              .toString()
+                                              .toUpperCase(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 25,
+                                              color: Colors.grey[300]),
                                         ),
-                                        textAlign: TextAlign.center,
                                       ),
-                                    ),
-                                  );
-                                }),
-                              ),
+                                    )),
+                                Container(
+                                  child: GridView.count(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 5),
+                                    mainAxisSpacing: 3.0,
+                                    crossAxisSpacing: 3.0,
+                                    scrollDirection: Axis.vertical,
+                                    crossAxisCount: GridViewlayout(),
+                                    children: List.generate(
+                                        Hive.box('product')
+                                            .values
+                                            .where((element) =>
+                                                element.categorie ==
+                                                cat.categorie)
+                                            .length, (indexone) {
+                                      return Container(
+                                        child: RaisedButton(
+                                          splashColor: Color(0xFF45A29E),
+                                          color: Colors.grey[800],
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () {
+                                            var key = Hive.box('order').values;
+                                            if (key.isEmpty) {
+                                              print('fiiiiiiiiirst');
+                                              final neworder = NewOrder(
+                                                  allList[index][indexone].name,
+                                                  allList[index][indexone]
+                                                      .buyingPrice,
+                                                  allList[index][indexone]
+                                                      .sellingPrice,
+                                                  allList[index][indexone]
+                                                      .benefit,
+                                                  value,
+                                                  1);
+
+                                              addNewOrder(neworder);
+
+                                              setState(() {
+                                                calculatePrice();
+                                              });
+                                              Vibration.vibrate(duration: 100);
+
+                                              clearOldUNit();
+                                            } else {
+                                              key.forEach((item) =>
+                                                  allkeysList.add(item.key));
+                                              int lastkeyElement =
+                                                  allkeysList.last;
+                                              int newkeyElement =
+                                                  lastkeyElement + 1;
+
+                                              final neworder = NewOrder(
+                                                  allList[index][indexone].name,
+                                                  allList[index][indexone]
+                                                      .buyingPrice,
+                                                  allList[index][indexone]
+                                                      .sellingPrice,
+                                                  allList[index][indexone]
+                                                      .benefit,
+                                                  value,
+                                                  newkeyElement);
+
+                                              addNewOrder(neworder);
+
+                                              setState(() {
+                                                calculatePrice();
+                                              });
+                                              Vibration.vibrate(duration: 100);
+
+                                              clearOldUNit();
+                                            }
+                                            lenghtList = filtreList.length;
+                                          },
+                                          child: Text(
+                                            '${allList[index][indexone].name}'
+                                                .toString()
+                                                .toUpperCase(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Recursive',
+                                              fontSize: fontsize(),
+                                              color: Colors.white,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                          );
+                        })),
                 Container(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,

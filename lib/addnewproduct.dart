@@ -190,7 +190,7 @@ class _AddProductState extends State<AddProduct> {
                         Toast.show("Produit sauvegardé avec succès", context,
                             duration: 2,
                             gravity: Toast.BOTTOM,
-                            textColor: Color(0xFF66FCF1));
+                            textColor: Colors.white);
                       }
                     },
                     child: Text('Sauvegarder',

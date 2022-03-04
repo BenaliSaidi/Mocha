@@ -25,7 +25,17 @@ Color buttoncolor = Color(0xFF0a0a0a);
 Color colorTable;
 var size = 0;
 
-// ignore: non_constant_identifier_names
+String pass;
+String psw;
+
+String mdp() {
+  if (Hive.box('password').isNotEmpty) {
+    psw = Hive.box('password').getAt(0).pwd;
+  } else {
+    psw = 'admin';
+  }
+  return psw;
+}
 
 void addNewMorningStat(NewList stat) {
   Hive.openBox('statMorning');
@@ -63,18 +73,6 @@ calculateTotalBenefit() {
   int sumTB = totalbenefits.reduce((c, d) => c + d);
   print('sum pf b $sumTB');
   return sumTB;
-}
-
-String pass;
-String psw;
-
-String mdp() {
-  if (Hive.box('password').isNotEmpty) {
-    psw = Hive.box('password').getAt(0).pwd;
-  } else {
-    psw = 'admin';
-  }
-  return psw;
 }
 
 class TablesMorning extends StatefulWidget {
@@ -199,19 +197,12 @@ class _TablesMorningState extends State<TablesMorning> {
                                   builder: (BuildContext context) {
                                     return AlertDialog(
                                       content: Container(
-                                        height: 150,
+                                        height: 200,
                                         child: Column(
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 20, top: 20),
-                                              child: Text(
-                                                  'Voulez vous vraiment supprimer cette table ?'),
-                                            ),
+                                            Text(
+                                                'Voulez vous vraiment supprimer cette table'),
                                             OutlinedButton(
-                                                style: OutlinedButton.styleFrom(
-                                                  backgroundColor: Colors.black,
-                                                ),
                                                 onPressed: () {
                                                   Hive.box('table')
                                                       .deleteAt(index);
@@ -225,11 +216,7 @@ class _TablesMorningState extends State<TablesMorning> {
                                                   Navigator.pop(context);
                                                   setState(() {});
                                                 },
-                                                child: Text(
-                                                  'OUI',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ))
+                                                child: Text('OUI'))
                                           ],
                                         ),
                                       ),
@@ -345,7 +332,7 @@ class _TablesMorningState extends State<TablesMorning> {
                                                   bigmap);
 
                                               addNewMorningStat(recette);
-                                              // Hive.box('order').clear();
+                                              //  Hive.box('order').clear();
                                               Hive.box('Paidproduct').clear();
                                               Hive.box('history').clear();
 

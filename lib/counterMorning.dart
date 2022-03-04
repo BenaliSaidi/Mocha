@@ -14,32 +14,21 @@ Size displaySize(BuildContext context) {
 }
 
 List<dynamic> listToDelete = [];
-List<dynamic> listOfTable = [];
+
 List<int> prices = [];
 List<dynamic> allorder = [];
-List<dynamic> allkeys = [];
+
 List<String> productname = [];
 List<int> productsellingprice = [];
 List<int> productbenefits = [];
-List<int> productindex = [];
+
 List<int> benefit = [];
 List<int> productkey = [];
 List<String> unite = [];
-List<dynamic> filtre = [];
-
-List<String> productsnameList = [];
-List<int> productsellingpriceList = [];
-
-List<int> productkeyList = [];
-List<dynamic> filtreList = [];
-
-List<int> productbenefitsList = [];
-List<int> productindexList = [];
-List<int> benefitList = [];
-List<int> productbuyingpriceList = [];
 
 List<dynamic> allkeysList = [];
-List<dynamic> allList = [];
+List<dynamic> allLists = [];
+List<dynamic> filtreList = [];
 
 Color backgroundcolor = Color(0xFFececec);
 Color appbarcolor = Color(0xFF455A64);
@@ -66,8 +55,6 @@ void addNewOrder(NewOrder order) {
 }
 
 void addToPaidProduct(PaidProduct paidProduct) {
-  // ignore: non_constant_identifier_names
-
   final PpBox = Hive.box('Paidproduct');
   PpBox.add(paidProduct);
 }
@@ -94,10 +81,8 @@ clear() {
   print('deleeeeete');
 }
 
-generateList(int nbrList) {}
-
 class CounterMorning extends StatefulWidget {
-  String value;
+  final String value;
   CounterMorning({this.value});
 
   @override
@@ -107,8 +92,6 @@ class CounterMorning extends StatefulWidget {
 class _CounterMorningState extends State<CounterMorning> {
   String value;
   _CounterMorningState({this.value});
-
-  int lenghtList;
 
   int GridViewlayout() {
     if (displaySize(context).width < 400) {
@@ -189,12 +172,13 @@ class _CounterMorningState extends State<CounterMorning> {
     return sumB;
   }
 
-  final _formKey = GlobalKey<FormState>();
   String name;
 
   @override
   Widget build(BuildContext context) {
     clearOldUNit();
+    allLists.clear();
+    filtreList.clear();
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -370,132 +354,137 @@ class _CounterMorningState extends State<CounterMorning> {
                   ),
                 ),
                 Container(
-                  child: ListView.builder(
-                    itemCount: Hive.box('categorie').length,
-                    itemBuilder: (context, index) {
-                      final cat = Hive.box('categorie').getAt(index);
-                      final filtreList = Hive.box('product')
-                          .values
-                          .where((element) =>
-                              element.categorie == cat.categorie.toString())
-                          .toList();
+                    child: ListView.builder(
+                        itemCount: Hive.box('categorie').length,
+                        itemBuilder: (context, index) {
+                          final cat = Hive.box('categorie').getAt(index);
+                          filtreList = Hive.box('product')
+                              .values
+                              .where((element) =>
+                                  element.categorie == cat.categorie.toString())
+                              .toList();
 
-                      allList.add(filtreList);
+                          allLists.add(filtreList);
 
-                      return Container(
-                        child: Column(
-                          children: [
-                            Container(
-                                margin: EdgeInsets.only(bottom: 5),
-                                height: 60,
-                                width: double.maxFinite,
-                                color: Color(0xFF15171e),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0, top: 15, bottom: 15),
-                                  child: Center(
-                                    child: Text(
-                                      cat.categorie.toString().toUpperCase(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25,
-                                          color: Colors.grey[300]),
-                                    ),
-                                  ),
-                                )),
-                            Container(
-                              child: GridView.count(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.fromLTRB(2, 2, 2, 5),
-                                mainAxisSpacing: 3.0,
-                                crossAxisSpacing: 3.0,
-                                scrollDirection: Axis.vertical,
-                                crossAxisCount: GridViewlayout(),
-                                children: List.generate(
-                                    Hive.box('product')
-                                        .values
-                                        .where((element) =>
-                                            element.categorie == cat.categorie)
-                                        .length, (indexone) {
-                                  return Container(
-                                    child: RaisedButton(
-                                      splashColor: Color(0xFF45A29E),
-                                      color: Colors.grey[800],
-                                      padding: EdgeInsets.zero,
-                                      onPressed: () {
-                                        var key = Hive.box('order').values;
-                                        if (key.isEmpty) {
-                                          print('fiiiiiiiiirst');
-                                          final neworder = NewOrder(
-                                              allList[index][indexone].name,
-                                              allList[index][indexone]
-                                                  .buyingPrice,
-                                              allList[index][indexone]
-                                                  .sellingPrice,
-                                              allList[index][indexone].benefit,
-                                              value,
-                                              1);
-
-                                          addNewOrder(neworder);
-
-                                          setState(() {
-                                            calculatePrice();
-                                          });
-                                          Vibration.vibrate(duration: 100);
-
-                                          clearOldUNit();
-                                        } else {
-                                          key.forEach((item) =>
-                                              allkeysList.add(item.key));
-                                          int lastkeyElement = allkeysList.last;
-                                          int newkeyElement =
-                                              lastkeyElement + 1;
-
-                                          final neworder = NewOrder(
-                                              allList[index][indexone].name,
-                                              allList[index][indexone]
-                                                  .buyingPrice,
-                                              allList[index][indexone]
-                                                  .sellingPrice,
-                                              allList[index][indexone].benefit,
-                                              value,
-                                              newkeyElement);
-
-                                          addNewOrder(neworder);
-
-                                          setState(() {
-                                            calculatePrice();
-                                          });
-                                          Vibration.vibrate(duration: 100);
-
-                                          clearOldUNit();
-                                        }
-                                        lenghtList = filtreList.length;
-                                      },
-                                      child: Text(
-                                        '${allList[index][indexone].name}'
-                                            .toString()
-                                            .toUpperCase(),
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'Recursive',
-                                          fontSize: fontsize(),
-                                          color: Colors.white,
+                          return Container(
+                            child: Column(
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.only(bottom: 5),
+                                    height: 60,
+                                    width: double.maxFinite,
+                                    color: Color(0xFF15171e),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 10.0, top: 15, bottom: 15),
+                                      child: Center(
+                                        child: Text(
+                                          cat.categorie
+                                              .toString()
+                                              .toUpperCase(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 25,
+                                              color: Colors.grey[300]),
                                         ),
-                                        textAlign: TextAlign.center,
                                       ),
-                                    ),
-                                  );
-                                }),
-                              ),
+                                    )),
+                                Container(
+                                  child: GridView.count(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 5),
+                                    mainAxisSpacing: 3.0,
+                                    crossAxisSpacing: 3.0,
+                                    scrollDirection: Axis.vertical,
+                                    crossAxisCount: GridViewlayout(),
+                                    children: List.generate(
+                                        Hive.box('product')
+                                            .values
+                                            .where((element) =>
+                                                element.categorie ==
+                                                cat.categorie)
+                                            .length, (indexone) {
+                                      return Container(
+                                        child: RaisedButton(
+                                          splashColor: Color(0xFF45A29E),
+                                          color: Colors.grey[800],
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () {
+                                            var key = Hive.box('order').values;
+                                            if (key.isEmpty) {
+                                              print('fiiiiiiiiirst');
+                                              final neworder = NewOrder(
+                                                  allLists[index][indexone]
+                                                      .name,
+                                                  allLists[index][indexone]
+                                                      .buyingPrice,
+                                                  allLists[index][indexone]
+                                                      .sellingPrice,
+                                                  allLists[index][indexone]
+                                                      .benefit,
+                                                  value,
+                                                  1);
+
+                                              addNewOrder(neworder);
+
+                                              setState(() {
+                                                calculatePrice();
+                                              });
+                                              Vibration.vibrate(duration: 100);
+
+                                              clearOldUNit();
+                                            } else {
+                                              key.forEach((item) =>
+                                                  allkeysList.add(item.key));
+                                              int lastkeyElement =
+                                                  allkeysList.last;
+                                              int newkeyElement =
+                                                  lastkeyElement + 1;
+
+                                              final neworder = NewOrder(
+                                                  allLists[index][indexone]
+                                                      .name,
+                                                  allLists[index][indexone]
+                                                      .buyingPrice,
+                                                  allLists[index][indexone]
+                                                      .sellingPrice,
+                                                  allLists[index][indexone]
+                                                      .benefit,
+                                                  value,
+                                                  newkeyElement);
+
+                                              addNewOrder(neworder);
+
+                                              setState(() {
+                                                calculatePrice();
+                                              });
+                                              Vibration.vibrate(duration: 100);
+
+                                              clearOldUNit();
+                                            }
+                                          },
+                                          child: Text(
+                                            '${allLists[index][indexone].name}'
+                                                .toString()
+                                                .toUpperCase(),
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Recursive',
+                                              fontSize: fontsize(),
+                                              color: Colors.white,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                          );
+                        })),
                 Container(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -638,7 +627,9 @@ class _CounterMorningState extends State<CounterMorning> {
                             var bp = Hive.box('order')
                                 .get(productkey[index])
                                 .benefit;
-
+                            print('nom $name');
+                            print('nom $sp');
+                            print('nom $bp');
                             DateTime now = DateTime.now();
                             DateFormat formatter = DateFormat('HH:mm:ss');
                             String formatted = formatter.format(now);
@@ -652,7 +643,6 @@ class _CounterMorningState extends State<CounterMorning> {
                             var historyproduct = HistTable(
                                 sp, value, formatted, selPrice, selname);
                             addToHistory(historyproduct);
-
                             Hive.box('order').delete(productkey[index]);
                             final paidproduct = PaidProduct(name, sp, bp);
                             addToPaidProduct(paidproduct);
