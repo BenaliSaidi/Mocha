@@ -15,6 +15,7 @@ import 'package:mocha/model/endtime.dart';
 import 'package:mocha/model/unitproduct.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'model/TotalUnitProduct.dart';
+import 'model/deletedProduct.dart';
 import 'model/lastuse.dart';
 import 'model/order.dart';
 import 'model/paidproduct.dart';
@@ -33,6 +34,7 @@ void main() async {
   Hive.registerAdapter(PaidProductAdapter());
   Hive.registerAdapter(CategorieAdapter());
   Hive.registerAdapter(PassWordAdapter());
+  Hive.registerAdapter(DelProductAdapter());
 
   WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDirectory =
@@ -56,6 +58,7 @@ void main() async {
   await Hive.openBox('categorie');
   await Hive.openBox('history');
   await Hive.openBox('password');
+  await Hive.openBox('deletedProduct');
 
   var time = DateTime.now();
   // ignore: non_constant_identifier_names

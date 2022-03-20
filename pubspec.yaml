@@ -36,6 +36,7 @@ dependencies:
   flutter_paginator: ^0.0.6
   vibration: ^1.7.3
   number_pagination: ^0.0.3+2
+  dropdown_button2: ^1.2.2
   
   
 

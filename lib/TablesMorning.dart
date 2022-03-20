@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
+import 'package:mocha/delProduct.dart';
 import 'package:mocha/model/TotalUnitProduct.dart';
 import 'package:mocha/model/tableList.dart';
 import 'package:mocha/paidTable.dart';
@@ -45,6 +46,10 @@ void addNewMorningStat(NewList stat) {
 
 timeNow() {
   return newFormat.format(DateTime.now());
+}
+
+void deletedProduct() {
+  Hive.box('deletedProduct').clear();
 }
 
 int sumTP;
@@ -332,9 +337,10 @@ class _TablesMorningState extends State<TablesMorning> {
                                                   bigmap);
 
                                               addNewMorningStat(recette);
-                                              //  Hive.box('order').clear();
+
                                               Hive.box('Paidproduct').clear();
                                               Hive.box('history').clear();
+                                              deletedProduct();
 
                                               Toast.show(
                                                   "Bravo vous avez clôturé la journée",
@@ -497,6 +503,118 @@ class _TablesMorningState extends State<TablesMorning> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
                         child: Icon(Icons.list),
+                      )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  OutlinedButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                content: Container(
+                                  height: 200,
+                                  width: 200,
+                                  padding: EdgeInsets.only(top: 30),
+                                  child: Column(
+                                    children: [
+                                      Form(
+                                        key: _formKey,
+                                        child: Column(
+                                          children: [
+                                            TextFormField(
+                                              obscureText: true,
+                                              keyboardType: TextInputType.text,
+                                              style: TextStyle(
+                                                color: buttoncolor,
+                                              ),
+                                              decoration: InputDecoration(
+                                                isDense: true,
+                                                filled: true,
+                                                fillColor: Colors.white10,
+                                                labelText: 'Password',
+                                                labelStyle: TextStyle(
+                                                    color: buttoncolor,
+                                                    fontSize: 13),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  borderSide: BorderSide(
+                                                      width: 2,
+                                                      color: buttoncolor),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                ),
+                                              ),
+                                              onSaved: (value) => pass = value,
+                                              validator: (value) {
+                                                if (value.isEmpty) {
+                                                  return 'SVP INSEREZ UN MDP VALIDE';
+                                                }
+                                                if (value != psw) {
+                                                  return 'SVP INSEREZ UN MDP VALIDE';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                            SizedBox(height: 30),
+                                            ElevatedButton(
+                                                style: ButtonStyle(
+                                                    backgroundColor:
+                                                        MaterialStateProperty
+                                                            .all<Color>(
+                                                                buttoncolor)),
+                                                onPressed: () {
+                                                  if (_formKey.currentState
+                                                      .validate()) {
+                                                    _formKey.currentState
+                                                        .save();
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              delProducts()),
+                                                    );
+                                                  }
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 30, right: 30),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 13.0,
+                                                            bottom: 13),
+                                                    child: Center(
+                                                      child: Text(
+                                                        'Valider',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Color(0xFF455A64),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                        child: Icon(Icons.delete),
                       )),
                 ],
               )),

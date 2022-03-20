@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:mocha/model/deletedProduct.dart';
 import 'package:mocha/model/histTable.dart';
 import 'package:mocha/model/unitproduct.dart';
 import 'package:toast/toast.dart';
@@ -25,6 +26,7 @@ List<int> productbenefits = [];
 List<int> benefit = [];
 List<int> productkey = [];
 List<String> unite = [];
+List<String> TableList = [];
 
 List<dynamic> allkeysList = [];
 List<dynamic> allLists = [];
@@ -68,6 +70,20 @@ void addNewUnit(Unit unit) {
   statBox.add(unit);
 }
 
+List<String> RetListTable() {
+  TableList.clear();
+  List tableListObj = Hive.box('table').values.toList();
+  tableListObj.forEach((element) {
+    TableList.add(element.name);
+  });
+
+  return TableList;
+}
+
+void addTodelPro(DelProduct delPro) {
+  Hive.box('deletedProduct').add(delPro);
+}
+
 clearOldUNit() {
   Hive.box('unitMorning').clear();
 }
@@ -78,7 +94,6 @@ clearOldTotalUNit() {
 
 clear() {
   Hive.box('order').clear();
-  print('deleeeeete');
 }
 
 class CounterMorning extends StatefulWidget {
@@ -173,6 +188,7 @@ class _CounterMorningState extends State<CounterMorning> {
   }
 
   String name;
+  String newTable;
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +199,17 @@ class _CounterMorningState extends State<CounterMorning> {
       length: 3,
       child: Scaffold(
           appBar: AppBar(
+            actions: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    allLists.clear();
+                    filtreList.clear();
+                  });
+                },
+                icon: Icon(Icons.refresh),
+              )
+            ],
             title: Text(
               'Table ' + value.toString(),
               style: TextStyle(fontSize: 30, color: Colors.white),
@@ -240,6 +267,16 @@ class _CounterMorningState extends State<CounterMorning> {
                                   onPressed: () {},
                                   icon: Icon(Icons.delete,
                                       color: Color(0x00000000)),
+                                ),
+                              ),
+                              Container(
+                                width: 30,
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color: Color(0x00000000),
+                                  ),
+                                  onPressed: () {},
                                 ),
                               ),
                               Container(
@@ -660,11 +697,188 @@ class _CounterMorningState extends State<CounterMorning> {
                         width: 30,
                         child: IconButton(
                           icon: Icon(
+                            Icons.edit,
+                            color: Colors.teal[700],
+                          ),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return StatefulBuilder(
+                                      builder: (context, setState) =>
+                                          AlertDialog(
+                                            content: Container(
+                                              height: 300,
+                                              child: SingleChildScrollView(
+                                                child: Form(
+                                                    //  key: _formKey,
+                                                    child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                          'Veuillez Inserer la table SVP'),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 40,
+                                                    ),
+                                                    Container(
+                                                        padding:
+                                                            EdgeInsets.all(5),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              color: Colors
+                                                                  .grey[600]),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      5.0),
+                                                        ),
+                                                        child: DropdownButton(
+                                                          hint: Text('Table'),
+                                                          onChanged:
+                                                              (newValue) {
+                                                            setState(() {
+                                                              newTable = newValue
+                                                                  .toString();
+                                                            });
+                                                          },
+                                                          value: newTable,
+                                                          isExpanded: true,
+                                                          items: RetListTable()
+                                                              .map((e) {
+                                                            return DropdownMenuItem(
+                                                              value: e,
+                                                              child: Text(e),
+                                                            );
+                                                          }).toList(),
+                                                        )),
+                                                    SizedBox(
+                                                      height: 50,
+                                                    ),
+                                                    RaisedButton(
+                                                      color: buttoncolor,
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              10, 15, 10, 15),
+                                                      onPressed: () {
+                                                        var name =
+                                                            Hive.box('order')
+                                                                .get(productkey[
+                                                                    index])
+                                                                .name;
+                                                        var sp =
+                                                            Hive.box('order')
+                                                                .get(productkey[
+                                                                    index])
+                                                                .sellingPrice;
+                                                        var bp =
+                                                            Hive.box('order')
+                                                                .get(productkey[
+                                                                    index])
+                                                                .benefit;
+
+                                                        var bypr =
+                                                            Hive.box('order')
+                                                                .get(productkey[
+                                                                    index])
+                                                                .sellingPrice;
+                                                        var key =
+                                                            Hive.box('order')
+                                                                .values;
+                                                        Hive.box('order')
+                                                            .delete(productkey[
+                                                                index]);
+                                                        if (key.isEmpty) {
+                                                          print(
+                                                              'fiiiiiiiiirst');
+                                                          final neworder =
+                                                              NewOrder(
+                                                                  name,
+                                                                  bypr,
+                                                                  sp,
+                                                                  bp,
+                                                                  newTable,
+                                                                  1);
+
+                                                          addNewOrder(neworder);
+
+                                                          setState(() {
+                                                            calculatePrice();
+                                                          });
+                                                          Vibration.vibrate(
+                                                              duration: 100);
+
+                                                          clearOldUNit();
+                                                        } else {
+                                                          key.forEach((item) =>
+                                                              allkeysList.add(
+                                                                  item.key));
+                                                          int lastkeyElement =
+                                                              allkeysList.last;
+                                                          int newkeyElement =
+                                                              lastkeyElement +
+                                                                  1;
+
+                                                          final neworder =
+                                                              NewOrder(
+                                                                  name,
+                                                                  bypr,
+                                                                  sp,
+                                                                  bp,
+                                                                  newTable,
+                                                                  newkeyElement);
+
+                                                          addNewOrder(neworder);
+
+                                                          setState(() {
+                                                            calculatePrice();
+                                                          });
+                                                          Vibration.vibrate(
+                                                              duration: 100);
+
+                                                          clearOldUNit();
+                                                        }
+                                                      },
+                                                      child: Text('transférez',
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              color:
+                                                                  backgroundcolor)),
+                                                    )
+                                                  ],
+                                                )),
+                                              ),
+                                            ),
+                                          ));
+                                });
+                          },
+                        ),
+                      ),
+                      Container(
+                        width: 30,
+                        child: IconButton(
+                          icon: Icon(
                             Icons.delete,
                             color: Color(0xFF9a4c40),
                           ),
                           onPressed: () {
-                            print(productkey[index]);
+                            var name =
+                                Hive.box('order').get(productkey[index]).name;
+                            var sp = Hive.box('order')
+                                .get(productkey[index])
+                                .sellingPrice;
+
+                            DateTime now = DateTime.now();
+                            DateFormat formatter = DateFormat('HH:mm:ss');
+                            String formatted = formatter.format(now);
+
+                            var del_Prod =
+                                DelProduct(name, sp, value, formatted);
+                            addTodelPro(del_Prod);
                             Hive.box('order').delete(productkey[index]);
 
                             Toast.show("Produit supprimé avec succès", context,
