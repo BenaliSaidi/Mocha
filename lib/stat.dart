@@ -20,7 +20,6 @@ int nbrOfpage_Mor;
 void setPageEvening(selectedPage_Eve) {
   int longueur = Hive.box('statEvening').length;
   nbrOfpage_Eve = (longueur ~/ 20) + 1;
-
   startKey_Eve = (selectedPage_Eve - 1) * 20;
   endKey_Eve = (selectedPage_Eve * 20);
   while (endKey_Eve > longueur) {
@@ -31,7 +30,6 @@ void setPageEvening(selectedPage_Eve) {
 void setPageMorning(selectedPage_Mor) {
   int longueur = Hive.box('statMorning').length;
   nbrOfpage_Mor = (longueur ~/ 20) + 1;
-
   startKey_Mor = (selectedPage_Mor - 1) * 20;
   endKey_Mor = (selectedPage_Mor * 20);
   while (endKey_Mor > longueur) {
@@ -293,7 +291,8 @@ class _StatState extends State<Stat> {
           // shrinkWrap: true,
           itemCount: teslistToDisplay.length,
           itemBuilder: (context, index) {
-            final stat = Hive.box('statEvening').getAt(index) as NewList;
+            int myIndex = index + (selectedPageNumber_Mor * 20) - 20;
+            final stat = Hive.box('statEvening').getAt(myIndex) as NewList;
             return ListTile(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -337,10 +336,15 @@ class _StatState extends State<Stat> {
                           color: Color(0xFF45A29E),
                         ),
                         onPressed: () {
-                          var names =
-                              teslistToDisplay[index].histPro.keys.toList();
-                          var prices =
-                              teslistToDisplay[index].histPro.values.toList();
+                          print(index);
+                          var names = state[myIndex].histPro.keys.toList();
+                          var prices = state[myIndex].histPro.values.toList();
+
+                          // var names =
+                          //     teslistToDisplay[index].histPro.keys.toList();
+
+                          // var prices =
+                          //     teslistToDisplay[index].histPro.values.toList();
                           print(prices);
                           showDialog(
                               context: context,
@@ -419,7 +423,7 @@ class _StatState extends State<Stat> {
                         color: Colors.redAccent,
                       ),
                       onPressed: () {
-                        Hive.box('statEvening').deleteAt(index);
+                        Hive.box('statEvening').deleteAt(myIndex);
                         setPageEvening(selectedPageNumber_Eve);
                         setState(() {});
                       },
@@ -446,7 +450,8 @@ class _StatState extends State<Stat> {
           shrinkWrap: true,
           itemCount: teslistToDisplay.length,
           itemBuilder: (context, index) {
-            final stat = Hive.box('statMorning').getAt(index) as NewList;
+            int myIndex = index + (selectedPageNumber_Mor * 20) - 20;
+            final stat = Hive.box('statMorning').getAt(myIndex) as NewList;
             return ListTile(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -490,11 +495,14 @@ class _StatState extends State<Stat> {
                           color: Color(0xFF45A29E),
                         ),
                         onPressed: () {
-                          var names =
-                              teslistToDisplay[index].histPro.keys.toList();
-                          var prices =
-                              teslistToDisplay[index].histPro.values.toList();
-                          print(prices);
+                          var names = state[myIndex].histPro.keys.toList();
+                          var prices = state[myIndex].histPro.values.toList();
+                          // var names =
+                          //     teslistToDisplay[index].histPro.keys.toList();
+                          // var prices =
+                          //     teslistToDisplay[index].histPro.values.toList();
+                          // print(prices);
+
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -572,7 +580,7 @@ class _StatState extends State<Stat> {
                         color: Colors.redAccent,
                       ),
                       onPressed: () {
-                        Hive.box('statMorning').deleteAt(index);
+                        Hive.box('statMorning').deleteAt(myIndex);
                         setPageMorning(selectedPageNumber_Mor);
                         setState(() {});
                       },

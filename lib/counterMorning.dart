@@ -106,6 +106,8 @@ class CounterMorning extends StatefulWidget {
 
 class _CounterMorningState extends State<CounterMorning> {
   String value;
+  var _formKey = GlobalKey<FormState>();
+  String _dropdownError;
   _CounterMorningState({this.value});
 
   int GridViewlayout() {
@@ -188,7 +190,7 @@ class _CounterMorningState extends State<CounterMorning> {
   }
 
   String name;
-  String newTable;
+  String newTable = Hive.box("table").getAt(0).name;
 
   @override
   Widget build(BuildContext context) {
@@ -708,149 +710,164 @@ class _CounterMorningState extends State<CounterMorning> {
                                       builder: (context, setState) =>
                                           AlertDialog(
                                             content: Container(
-                                              height: 300,
+                                              height: 270,
                                               child: SingleChildScrollView(
                                                 child: Form(
-                                                    //  key: _formKey,
+                                                    key: _formKey,
                                                     child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .stretch,
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                          'Veuillez Inserer la table SVP'),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 40,
-                                                    ),
-                                                    Container(
-                                                        padding:
-                                                            EdgeInsets.all(5),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          border: Border.all(
-                                                              color: Colors
-                                                                  .grey[600]),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      5.0),
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .stretch,
+                                                      children: [
+                                                        Center(
+                                                          child: Text(
+                                                              'Veuillez Inserer la table SVP'),
                                                         ),
-                                                        child: DropdownButton(
-                                                          hint: Text('Table'),
-                                                          onChanged:
-                                                              (newValue) {
-                                                            setState(() {
-                                                              newTable = newValue
-                                                                  .toString();
-                                                            });
-                                                          },
-                                                          value: newTable,
-                                                          isExpanded: true,
-                                                          items: RetListTable()
-                                                              .map((e) {
-                                                            return DropdownMenuItem(
-                                                              value: e,
-                                                              child: Text(e),
-                                                            );
-                                                          }).toList(),
-                                                        )),
-                                                    SizedBox(
-                                                      height: 50,
-                                                    ),
-                                                    RaisedButton(
-                                                      color: buttoncolor,
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              10, 15, 10, 15),
-                                                      onPressed: () {
-                                                        var name =
-                                                            Hive.box('order')
+                                                        SizedBox(
+                                                          height: 40,
+                                                        ),
+                                                        Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    5),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      600]),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0),
+                                                            ),
+                                                            child:
+                                                                DropdownButton(
+                                                              hint:
+                                                                  Text('Table'),
+                                                              onChanged:
+                                                                  (newValue) {
+                                                                setState(() {
+                                                                  newTable =
+                                                                      newValue
+                                                                          .toString();
+                                                                });
+                                                              },
+                                                              value: newTable,
+                                                              isExpanded: true,
+                                                              items:
+                                                                  RetListTable()
+                                                                      .map((e) {
+                                                                return DropdownMenuItem(
+                                                                  value: e,
+                                                                  child:
+                                                                      Text(e),
+                                                                );
+                                                              }).toList(),
+                                                            )),
+                                                        SizedBox(
+                                                          height: 50,
+                                                        ),
+                                                        RaisedButton(
+                                                          color: buttoncolor,
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(10, 15,
+                                                                  10, 15),
+                                                          onPressed: () {
+                                                            var name = Hive.box(
+                                                                    'order')
                                                                 .get(productkey[
                                                                     index])
                                                                 .name;
-                                                        var sp =
-                                                            Hive.box('order')
+                                                            var sp = Hive.box(
+                                                                    'order')
                                                                 .get(productkey[
                                                                     index])
                                                                 .sellingPrice;
-                                                        var bp =
-                                                            Hive.box('order')
+                                                            var bp = Hive.box(
+                                                                    'order')
                                                                 .get(productkey[
                                                                     index])
                                                                 .benefit;
 
-                                                        var bypr =
-                                                            Hive.box('order')
+                                                            var bypr = Hive.box(
+                                                                    'order')
                                                                 .get(productkey[
                                                                     index])
                                                                 .sellingPrice;
-                                                        var key =
-                                                            Hive.box('order')
+                                                            var key = Hive.box(
+                                                                    'order')
                                                                 .values;
-                                                        Hive.box('order')
-                                                            .delete(productkey[
-                                                                index]);
-                                                        if (key.isEmpty) {
-                                                          print(
-                                                              'fiiiiiiiiirst');
-                                                          final neworder =
-                                                              NewOrder(
-                                                                  name,
-                                                                  bypr,
-                                                                  sp,
-                                                                  bp,
-                                                                  newTable,
-                                                                  1);
+                                                            Hive.box('order')
+                                                                .delete(
+                                                                    productkey[
+                                                                        index]);
+                                                            if (key.isEmpty) {
+                                                              print(
+                                                                  'fiiiiiiiiirst');
+                                                              final neworder =
+                                                                  NewOrder(
+                                                                      name,
+                                                                      bypr,
+                                                                      sp,
+                                                                      bp,
+                                                                      newTable,
+                                                                      1);
 
-                                                          addNewOrder(neworder);
+                                                              addNewOrder(
+                                                                  neworder);
 
-                                                          setState(() {
-                                                            calculatePrice();
-                                                          });
-                                                          Vibration.vibrate(
-                                                              duration: 100);
+                                                              setState(() {
+                                                                calculatePrice();
+                                                              });
+                                                              Vibration.vibrate(
+                                                                  duration:
+                                                                      100);
 
-                                                          clearOldUNit();
-                                                        } else {
-                                                          key.forEach((item) =>
-                                                              allkeysList.add(
-                                                                  item.key));
-                                                          int lastkeyElement =
-                                                              allkeysList.last;
-                                                          int newkeyElement =
-                                                              lastkeyElement +
-                                                                  1;
+                                                              clearOldUNit();
+                                                            } else {
+                                                              key.forEach((item) =>
+                                                                  allkeysList
+                                                                      .add(item
+                                                                          .key));
+                                                              int lastkeyElement =
+                                                                  allkeysList
+                                                                      .last;
+                                                              int newkeyElement =
+                                                                  lastkeyElement +
+                                                                      1;
 
-                                                          final neworder =
-                                                              NewOrder(
-                                                                  name,
-                                                                  bypr,
-                                                                  sp,
-                                                                  bp,
-                                                                  newTable,
-                                                                  newkeyElement);
+                                                              final neworder =
+                                                                  NewOrder(
+                                                                      name,
+                                                                      bypr,
+                                                                      sp,
+                                                                      bp,
+                                                                      newTable,
+                                                                      newkeyElement);
 
-                                                          addNewOrder(neworder);
+                                                              addNewOrder(
+                                                                  neworder);
 
-                                                          setState(() {
-                                                            calculatePrice();
-                                                          });
-                                                          Vibration.vibrate(
-                                                              duration: 100);
+                                                              setState(() {
+                                                                calculatePrice();
+                                                              });
+                                                              Vibration.vibrate(
+                                                                  duration:
+                                                                      100);
 
-                                                          clearOldUNit();
-                                                        }
-                                                      },
-                                                      child: Text('transférez',
-                                                          style: TextStyle(
-                                                              fontSize: 20,
-                                                              color:
-                                                                  backgroundcolor)),
-                                                    )
-                                                  ],
-                                                )),
+                                                              clearOldUNit();
+                                                            }
+                                                          },
+                                                          child: Text(
+                                                              'transférez',
+                                                              style: TextStyle(
+                                                                  fontSize: 20,
+                                                                  color:
+                                                                      backgroundcolor)),
+                                                        )
+                                                      ],
+                                                    )),
                                               ),
                                             ),
                                           ));
