@@ -122,7 +122,7 @@ class _CounterEveningState extends State<CounterEvening> {
   _CounterEveningState({this.Tablevalue});
 
   int lenghtList;
-  String newTable;
+  String newTable = Hive.box("table").getAt(0).name;
 
   int GridViewlayout() {
     if (displaySize(context).width < 400) {
@@ -853,9 +853,6 @@ class _CounterEveningState extends State<CounterEvening> {
 
                                                           addNewOrder(neworder);
 
-                                                          setState(() {
-                                                            calculatePrice();
-                                                          });
                                                           Vibration.vibrate(
                                                               duration: 100);
 
@@ -863,6 +860,9 @@ class _CounterEveningState extends State<CounterEvening> {
                                                         }
                                                         lenghtList =
                                                             filtreList.length;
+                                                        setState(() {
+                                                          calculatePrice();
+                                                        });
                                                       },
                                                       child: Text('transférez',
                                                           style: TextStyle(

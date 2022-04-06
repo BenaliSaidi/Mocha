@@ -8,7 +8,7 @@ part of 'deletedProduct.dart';
 
 class DelProductAdapter extends TypeAdapter<DelProduct> {
   @override
-  final int typeId = 13;
+  final int typeId = 14;
 
   @override
   DelProduct read(BinaryReader reader) {

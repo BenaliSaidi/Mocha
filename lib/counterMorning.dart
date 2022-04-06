@@ -849,14 +849,15 @@ class _CounterMorningState extends State<CounterMorning> {
                                                               addNewOrder(
                                                                   neworder);
 
-                                                              setState(() {
-                                                                calculatePrice();
-                                                              });
                                                               Vibration.vibrate(
                                                                   duration:
                                                                       100);
 
                                                               clearOldUNit();
+
+                                                              setState(() {
+                                                                calculatePrice();
+                                                              });
                                                             }
                                                           },
                                                           child: Text(
