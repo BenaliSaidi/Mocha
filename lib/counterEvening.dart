@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:mocha/model/histTable.dart';
 import 'package:mocha/model/unitproduct.dart';
+import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:vibration/vibration.dart';
 import 'model/deletedProduct.dart';
@@ -170,6 +171,7 @@ class _CounterEveningState extends State<CounterEvening> {
     });
   }
 
+  ValueNotifier<int> sumP = ValueNotifier(0);
   calculatePrice() {
     var pricesList = Hive.box('order')
         .values
@@ -182,7 +184,7 @@ class _CounterEveningState extends State<CounterEvening> {
     }
     pricesList.forEach((item) => prices.add(item.sellingPrice));
     //print(prices);
-    int sumP = prices.reduce((curr, next) => curr + next);
+    sumP.value = prices.reduce((curr, next) => curr + next);
     //print(sumP);
     return sumP;
   }
@@ -208,23 +210,27 @@ class _CounterEveningState extends State<CounterEvening> {
   @override
   Widget build(BuildContext context) {
     clearOldUNit();
-    allList.clear();
-    filtreList.clear();
+    calculatePrice();
+    // allList.clear();
+    // filtreList.clear();
     return DefaultTabController(
       length: 3,
       child: Scaffold(
           appBar: AppBar(
-            actions: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    allList.clear();
-                    filtreList.clear();
-                  });
-                },
-                icon: Icon(Icons.refresh),
-              )
-            ],
+            // actions: [
+            //   Pfadding(
+            //     padding: const EdgeInsets.only(right: 20.0),
+            //     child: IconButton(
+            //       onPressed: () {
+            //         setState(() {
+            //           allList.clear();
+            //           filtreList.clear();
+            //         });
+            //       },
+            //       icon: Icon(Icons.refresh),
+            //     ),
+            //   )
+            // ],
             title: Text(
               'Table ' + Tablevalue.toString(),
               style: TextStyle(fontSize: 30, color: Colors.white),
@@ -313,14 +319,17 @@ class _CounterEveningState extends State<CounterEvening> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(
-                                  '    Total : ' +
-                                      calculatePrice().toString() +
-                                      ' DA',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
+                              ValueListenableBuilder(
+                                valueListenable: sumP,
+                                builder: (context, value, child) {
+                                  return Text(
+                                      '    Total : ' + value.toString() + ' DA',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold));
+                                },
+                              ),
                               SizedBox(
                                 width: 50,
                               ),
@@ -727,7 +736,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                       builder: (context, setState) =>
                                           AlertDialog(
                                             content: Container(
-                                              height: 300,
+                                              height: 200,
                                               child: SingleChildScrollView(
                                                 child: Form(
                                                     //  key: _formKey,
@@ -741,7 +750,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                                           'Veuillez Inserer la table SVP'),
                                                     ),
                                                     SizedBox(
-                                                      height: 40,
+                                                      height: 30,
                                                     ),
                                                     Container(
                                                         padding:
@@ -776,7 +785,7 @@ class _CounterEveningState extends State<CounterEvening> {
                                                           }).toList(),
                                                         )),
                                                     SizedBox(
-                                                      height: 50,
+                                                      height: 30,
                                                     ),
                                                     RaisedButton(
                                                       color: buttoncolor,
@@ -855,14 +864,14 @@ class _CounterEveningState extends State<CounterEvening> {
 
                                                           Vibration.vibrate(
                                                               duration: 100);
-
+                                                          lenghtList =
+                                                              filtreList.length;
+                                                          setState(() {
+                                                            calculatePrice();
+                                                          });
                                                           clearOldUNit();
                                                         }
-                                                        lenghtList =
-                                                            filtreList.length;
-                                                        setState(() {
-                                                          calculatePrice();
-                                                        });
+                                                        Navigator.pop(context);
                                                       },
                                                       child: Text('transférez',
                                                           style: TextStyle(

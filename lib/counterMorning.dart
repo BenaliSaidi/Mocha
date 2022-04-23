@@ -156,6 +156,7 @@ class _CounterMorningState extends State<CounterMorning> {
     });
   }
 
+  ValueNotifier<int> sumP = ValueNotifier(0);
   calculatePrice() {
     var pricesList = Hive.box('order')
         .values
@@ -168,7 +169,7 @@ class _CounterMorningState extends State<CounterMorning> {
     }
     pricesList.forEach((item) => prices.add(item.sellingPrice));
     //print(prices);
-    int sumP = prices.reduce((curr, next) => curr + next);
+    sumP.value = prices.reduce((curr, next) => curr + next);
     //print(sumP);
     return sumP;
   }
@@ -195,23 +196,27 @@ class _CounterMorningState extends State<CounterMorning> {
   @override
   Widget build(BuildContext context) {
     clearOldUNit();
-    allLists.clear();
-    filtreList.clear();
+    calculatePrice();
+    // allLists.clear();
+    // filtreList.clear();
     return DefaultTabController(
       length: 3,
       child: Scaffold(
           appBar: AppBar(
-            actions: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    allLists.clear();
-                    filtreList.clear();
-                  });
-                },
-                icon: Icon(Icons.refresh),
-              )
-            ],
+            // actions: [
+            //   Padding(
+            //     padding: const EdgeInsets.only(right: 20.0),
+            //     child: IconButton(
+            //       onPressed: () {
+            //         setState(() {
+            //           allLists.clear();
+            //           filtreList.clear();
+            //         });
+            //       },
+            //       icon: Icon(Icons.refresh),
+            //     ),
+            //   )
+            // ],
             title: Text(
               'Table ' + value.toString(),
               style: TextStyle(fontSize: 30, color: Colors.white),
@@ -300,14 +305,17 @@ class _CounterMorningState extends State<CounterMorning> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(
-                                  '    Total : ' +
-                                      calculatePrice().toString() +
-                                      ' DA',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold)),
+                              ValueListenableBuilder(
+                                valueListenable: sumP,
+                                builder: (context, value, child) {
+                                  return Text(
+                                      '    Total : ' + value.toString() + ' DA',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold));
+                                },
+                              ),
                               SizedBox(
                                 width: 50,
                               ),
@@ -710,7 +718,7 @@ class _CounterMorningState extends State<CounterMorning> {
                                       builder: (context, setState) =>
                                           AlertDialog(
                                             content: Container(
-                                              height: 270,
+                                              height: 200,
                                               child: SingleChildScrollView(
                                                 child: Form(
                                                     key: _formKey,
@@ -724,7 +732,7 @@ class _CounterMorningState extends State<CounterMorning> {
                                                               'Veuillez Inserer la table SVP'),
                                                         ),
                                                         SizedBox(
-                                                          height: 40,
+                                                          height: 30,
                                                         ),
                                                         Container(
                                                             padding:
@@ -766,7 +774,7 @@ class _CounterMorningState extends State<CounterMorning> {
                                                               }).toList(),
                                                             )),
                                                         SizedBox(
-                                                          height: 50,
+                                                          height: 30,
                                                         ),
                                                         RaisedButton(
                                                           color: buttoncolor,
@@ -859,6 +867,8 @@ class _CounterMorningState extends State<CounterMorning> {
                                                                 calculatePrice();
                                                               });
                                                             }
+                                                            Navigator.pop(
+                                                                context);
                                                           },
                                                           child: Text(
                                                               'transférez',
