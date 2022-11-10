@@ -21,11 +21,12 @@ String pass;
 String psw;
 
 String mdp() {
-  if (Hive.box('password').isNotEmpty) {
-    psw = Hive.box('password').getAt(0).pwd;
-  } else {
-    psw = 'admin';
-  }
+  // if (Hive.box('password').isNotEmpty) {
+  //   psw = Hive.box('password').getAt(0).pwd;
+  // } else {
+  //   psw = 'admin';
+  // }
+  psw = "admin";
   return psw;
 }
 

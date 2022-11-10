@@ -55,21 +55,21 @@ RetrieveUnit() {
   });
 }
 
-class UnitProduct extends StatefulWidget {
-  const UnitProduct({Key key}) : super(key: key);
+class UnitProEve extends StatefulWidget {
+  const UnitProEve({Key key}) : super(key: key);
 
   @override
-  _UnitProductState createState() => _UnitProductState();
+  _UnitProEveState createState() => _UnitProEveState();
 }
 
-class _UnitProductState extends State<UnitProduct> {
+class _UnitProEveState extends State<UnitProEve> {
   @override
   Widget build(BuildContext context) {
-    Hive.box('TotalunitEvening').clear();
+    RetrieveUnit();
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'UniT',
+          'UniT SoiR',
           style: TextStyle(fontSize: 30, color: backgroundcolor),
         ),
         centerTitle: true,
@@ -120,21 +120,18 @@ class _UnitProductState extends State<UnitProduct> {
                 style: TextStyle(fontSize: 25, color: Colors.black),
               ),
               onPressed: () {
-                setState(() {
-                  if (Hive.box('Paidproduct').length == 0) {
-                    Toast.show("Ajoutez d'abord un prosuit SVP", context,
-                        duration: 2,
-                        gravity: Toast.CENTER,
-                        textColor: Colors.white);
-                  } else {
-                    RetrieveUnit();
-                    Toast.show(
-                        calculateUnitPrice().toString() + ' DA ', context,
-                        duration: 1,
-                        gravity: Toast.BOTTOM,
-                        textColor: Colors.white);
-                  }
-                });
+                if (Hive.box('Paidproduct').length == 0) {
+                  Toast.show("Ajoutez d'abord un prosuit SVP", context,
+                      duration: 2,
+                      gravity: Toast.CENTER,
+                      textColor: Colors.white);
+                } else {
+                  //RetrieveUnit();
+                  Toast.show(calculateUnitPrice().toString() + ' DA ', context,
+                      duration: 1,
+                      gravity: Toast.BOTTOM,
+                      textColor: Colors.white);
+                }
               },
             ),
           )
@@ -145,7 +142,7 @@ class _UnitProductState extends State<UnitProduct> {
 
   Widget _buildListViewUnite() {
     return ValueListenableBuilder(
-      valueListenable: Hive.box('Paidproduct').listenable(),
+      valueListenable: Hive.box('TotalunitEvening').listenable(),
       builder: (context, box, widget) {
         return ListView.builder(
           itemCount: Hive.box('TotalunitEvening').length,
