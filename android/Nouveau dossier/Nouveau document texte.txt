@@ -1,0 +1,9 @@
+> Task :app:signingReport
+Variant: debug
+Config: debug
+Store: C:\Users\Pctec\.android\debug.keystore
+Alias: AndroidDebugKey
+MD5: 83:10:8A:97:55:DA:23:C9:A3:64:8D:84:71:B1:8E:1B
+SHA1: 80:FF:FD:3A:62:8E:44:04:F7:9E:67:C4:86:FE:A1:07:16:BE:5A:65
+SHA-256: BF:5F:53:32:5A:02:AC:B9:22:5A:85:58:A0:18:46:3E:3B:A1:53:1F:7E:22:7C:31:BF:1D:14:B1:5F:06:D5:0C
+Valid until: lundi 29 juillet 2052

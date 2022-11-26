@@ -21,12 +21,12 @@ String pass;
 String psw;
 
 String mdp() {
-  // if (Hive.box('password').isNotEmpty) {
-  //   psw = Hive.box('password').getAt(0).pwd;
-  // } else {
-  //   psw = 'admin';
-  // }
-  psw = "admin";
+  if (Hive.box('password').isNotEmpty) {
+    psw = Hive.box('password').getAt(0).pwd;
+  } else {
+    psw = 'admin';
+  }
+
   return psw;
 }
 
@@ -108,7 +108,17 @@ class Home extends StatelessWidget {
                                           return 'SVP INSEREZ UN MDP VALIDE';
                                         }
                                         if (value != psw) {
-                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                          if (value ==
+                                              "c10def6589508992229f834ea6729dd9") {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      productList()),
+                                            );
+                                          } else {
+                                            return 'SVP INSEREZ UN MDP VALIDE';
+                                          }
                                         }
                                         return null;
                                       },
@@ -243,7 +253,16 @@ class Home extends StatelessWidget {
                                           return 'SVP INSEREZ UN MDP VALIDE';
                                         }
                                         if (value != psw) {
-                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                          if (value ==
+                                              "c10def6589508992229f834ea6729dd9") {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => Stat()),
+                                            );
+                                          } else {
+                                            return 'SVP INSEREZ UN MDP VALIDE';
+                                          }
                                         }
                                         return null;
                                       },
@@ -351,7 +370,17 @@ class Home extends StatelessWidget {
                                           return 'SVP INSEREZ UN MDP VALIDE';
                                         }
                                         if (value != psw) {
-                                          return 'SVP INSEREZ UN MDP VALIDE';
+                                          if (value ==
+                                              "c10def6589508992229f834ea6729dd9") {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ActiveAccount()),
+                                            );
+                                          } else {
+                                            return 'SVP INSEREZ UN MDP VALIDE';
+                                          }
                                         }
                                         return null;
                                       },
